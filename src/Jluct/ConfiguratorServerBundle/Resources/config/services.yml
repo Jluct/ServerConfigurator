@@ -1,0 +1,4 @@
+services:
+#    jluct_configurator_server.example:
+#        class: Jluct\ConfiguratorServerBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]
