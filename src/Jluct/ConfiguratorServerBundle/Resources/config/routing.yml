@@ -1,3 +1,7 @@
 jluct_configurator_server_homepage:
     path:     /
     defaults: { _controller: JluctConfiguratorServerBundle:Default:index }
+
+jluct_configurator_server_add_data:
+    path:     /add-test-data
+    defaults: { _controller: JluctConfiguratorServerBundle:Default:addData }

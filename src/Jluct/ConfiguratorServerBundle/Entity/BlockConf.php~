@@ -125,52 +125,83 @@ class BlockConf
         return $this->date;
     }
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Jluct\ConfiguratorServerBundle\Entity\FileConf", inversedBy="blockConfig")
+     * @ORM\JoinColumn(name="fileConfig_id", referencedColumnName="id")
+     */
+    private $fileConfig;
+
 
     /**
-     * @var FileConf $fileConf
+     * Set fileConfig
      *
-     * @ORM\OneToMany(targetEntity="FileConf", mappedBy="blockConf")
-     */
-    private $fileConf;
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->fileConf = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add fileConf
-     *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\FileConf $fileConf
+     * @param \Jluct\ConfiguratorServerBundle\Entity\FileConf $fileConfig
      *
      * @return BlockConf
      */
-    public function addFileConf(\Jluct\ConfiguratorServerBundle\Entity\FileConf $fileConf)
+    public function setFileConfig(\Jluct\ConfiguratorServerBundle\Entity\FileConf $fileConfig = null)
     {
-        $this->fileConf[] = $fileConf;
+        $this->fileConfig = $fileConfig;
 
         return $this;
     }
 
     /**
-     * Remove fileConf
+     * Get fileConfig
      *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\FileConf $fileConf
+     * @return \Jluct\ConfiguratorServerBundle\Entity\FileConf
      */
-    public function removeFileConf(\Jluct\ConfiguratorServerBundle\Entity\FileConf $fileConf)
+    public function getFileConfig()
     {
-        $this->fileConf->removeElement($fileConf);
+        return $this->fileConfig;
     }
 
     /**
-     * Get fileConf
+     * @var
+     *
+     * @ORM\OneToMany(targetEntity="Jluct\ConfiguratorServerBundle\Entity\StringConf", mappedBy="blockConfig")
+     */
+    private $stringConfig;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->stringConfig = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add stringConfig
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $stringConfig
+     *
+     * @return BlockConf
+     */
+    public function addStringConfig(\Jluct\ConfiguratorServerBundle\Entity\StringConf $stringConfig)
+    {
+        $this->stringConfig[] = $stringConfig;
+
+        return $this;
+    }
+
+    /**
+     * Remove stringConfig
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $stringConfig
+     */
+    public function removeStringConfig(\Jluct\ConfiguratorServerBundle\Entity\StringConf $stringConfig)
+    {
+        $this->stringConfig->removeElement($stringConfig);
+    }
+
+    /**
+     * Get stringConfig
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFileConf()
+    public function getStringConfig()
     {
-        return $this->fileConf;
+        return $this->stringConfig;
     }
 }

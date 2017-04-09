@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * FileConf
  *
- * @ORM\Table(name="file_conf")
+ * @ORM\Table(name="FileConf")
  * @ORM\Entity(repositoryClass="Jluct\ConfiguratorServerBundle\Repository\FileConfRepository")
  */
 class FileConf
@@ -127,41 +127,52 @@ class FileConf
     }
 
     /**
-     * @var ArrayCollection
+     * @var
      *
-     *
-     * @ORM\ManyToOne(targetEntity="BlockConf", inversedBy="fileConf")
-     * @ORM\JoinColumn(name="FileConf_id", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="Jluct\ConfiguratorServerBundle\Entity\BlockConf", mappedBy="fileConfig", cascade={"persist"})
      */
-    private $blockConf;
-
-    public function __construct()
-    {
-        $this->blockConf = new ArrayCollection();
-    }
-
+    private $blockConfig;
 
     /**
-     * Set blockConf
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->blockConfig = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->setDate(new \DateTime());
+    }
+
+    /**
+     * Add blockConfig
      *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\BlockConf $blockConf
+     * @param \Jluct\ConfiguratorServerBundle\Entity\BlockConf $blockConfig
      *
      * @return FileConf
      */
-    public function setBlockConf(\Jluct\ConfiguratorServerBundle\Entity\BlockConf $blockConf = null)
+    public function addBlockConfig(\Jluct\ConfiguratorServerBundle\Entity\BlockConf $blockConfig)
     {
-        $this->blockConf = $blockConf;
+        $this->blockConfig[] = $blockConfig;
 
         return $this;
     }
 
     /**
-     * Get blockConf
+     * Remove blockConfig
      *
-     * @return \Jluct\ConfiguratorServerBundle\Entity\BlockConf
+     * @param \Jluct\ConfiguratorServerBundle\Entity\BlockConf $blockConfig
      */
-    public function getBlockConf()
+    public function removeBlockConfig(\Jluct\ConfiguratorServerBundle\Entity\BlockConf $blockConfig)
     {
-        return $this->blockConf;
+        $this->blockConfig->removeElement($blockConfig);
+    }
+
+    /**
+     * Get blockConfig
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBlockConfig()
+    {
+        return $this->blockConfig;
     }
 }

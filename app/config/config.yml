@@ -42,9 +42,9 @@ twig:
 # Doctrine Configuration
 doctrine:
     dbal:
-            driver: pdo_sqlite
-            path: '%kernel.root_dir%/sqlite.db'
-            charset: UTF8
+        driver: pdo_sqlite
+        path: '%kernel.root_dir%/sqlite.db'
+        charset: UTF8
 #        driver:   pdo_mysql
 #        host:     "%database_host%"
 #        port:     "%database_port%"
