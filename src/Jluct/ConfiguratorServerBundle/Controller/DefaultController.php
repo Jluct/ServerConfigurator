@@ -9,6 +9,7 @@ use Jluct\ConfiguratorServerBundle\Entity\StringConf;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\VarDumper\VarDumper;
 
 class DefaultController extends Controller
 {
@@ -20,6 +21,18 @@ class DefaultController extends Controller
     public function templateListAction()
     {
         return $this->render('JluctConfiguratorServerBundle:Default:template-list.html.twig');
+    }
+
+    public function getSettingFileAction($id)
+    {
+        $em = $this->getDoctrine()->getRepository('JluctConfiguratorServerBundle:FileConf');
+        $file = $em->find((int)$id);
+
+        $data = $em->getFileAllData($id);
+
+        VarDumper::dump($data);
+
+        return $this->render('JluctConfiguratorServerBundle:Default:file-config.html.twig', ['file' => $file]);
     }
 
     public function addDataAction()
@@ -123,11 +136,11 @@ class DefaultController extends Controller
         $file->addBlockConfig($block2);
 
 
-            $doc = $this->getDoctrine()->getManager();
-            $doc->persist($file);
-            $doc->flush();
+        $doc = $this->getDoctrine()->getManager();
+        $doc->persist($file);
         try {
-            
+            $doc->flush();
+
             return new Response('<div class="bg-success"><h2 class="text-center">Success</h2></div>');
 
         } catch (Exception $e) {

@@ -1,0 +1,21 @@
+{% extends 'JluctConfiguratorServerBundle::layout.html.twig' %}
+
+
+{% block body %}
+    <section class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <ul class="list-group">
+                    <li class="list-group-item"><b>Soft name</b> - {{ file.name }}</li>
+                    <li class="list-group-item"><b>Version</b> - {{ file.version }}</li>
+                    <li class="list-group-item"><b>Date </b> - {{ file.date|date('d-m-Y H:i:s') }}</li>
+
+                </ul>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
