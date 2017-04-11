@@ -7,8 +7,8 @@ use Jluct\ConfiguratorServerBundle\Entity\FileConf;
 use Jluct\ConfiguratorServerBundle\Entity\Meanings;
 use Jluct\ConfiguratorServerBundle\Entity\StringConf;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\VarDumper\VarDumper;
 
 class DefaultController extends Controller
@@ -26,13 +26,14 @@ class DefaultController extends Controller
     public function getSettingFileAction($id)
     {
         $em = $this->getDoctrine()->getRepository('JluctConfiguratorServerBundle:FileConf');
-        $file = $em->find((int)$id);
 
         $data = $em->getFileAllData($id);
 
         VarDumper::dump($data);
 
-        return $this->render('JluctConfiguratorServerBundle:Default:file-config.html.twig', ['file' => $file]);
+        return $this->render('JluctConfiguratorServerBundle:Default:file-config.html.twig', [
+                'data' => $data[0]]
+        );
     }
 
     public function addDataAction()
@@ -41,6 +42,7 @@ class DefaultController extends Controller
         $file->setName('Squid');
         $file->setDate(new \DateTime());
         $file->setVersion('3.1.9');
+        $file->setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer id quam vel mi commodo varius. Sed dapibus quam magna, cursus ultrices lacus elementum non. Proin ac egestas libero. Integer posuere enim ac nibh lacinia mollis. Ut congue porta condimentum. In aliquet maximus ante, non aliquet mauris aliquet eu. Integer bibendum, libero eget varius tincidunt, nisi nibh molestie diam, a vulputate sem mauris et ipsum. Maecenas ornare tempor elit, maximus varius erat iaculis in.");
 
         $block1 = new BlockConf();
         $block1->setName('AUTHENTICATION');
@@ -51,6 +53,11 @@ class DefaultController extends Controller
         $block2->setName('ACCESS');
         $block2->setRequired(true);
         $block2->setDate(new \DateTime());
+
+        $block3 = new BlockConf();
+        $block3->setName('NETWORK');
+        $block3->setRequired(true);
+        $block3->setDate(new \DateTime());
 
         $meanings1 = new Meanings();
         $meanings1->setName("'none'");
@@ -65,9 +72,6 @@ class DefaultController extends Controller
         $str1->setByDefault('none');
         $str1->setRequired(true);
         $str1->setOrders(1);
-
-        $str1->addMeaning($meanings1);
-        $str1->addMeaning($meanings2);
 
 
         $str2 = new StringConf();
@@ -120,6 +124,16 @@ class DefaultController extends Controller
         $str8->setRequired(true);
         $str8->setOrders(4);
 
+        $doc = $this->getDoctrine()->getManager();
+        $doc->persist($file);
+        $doc->flush();
+        //file
+        $file->addBlockConfig($block1);
+        $file->addBlockConfig($block2);
+        $file->addBlockConfig($block3);
+
+        $doc->persist($file);
+        $doc->flush();
 
         $block1->addStringConfig($str1);
         $block1->addStringConfig($str2);
@@ -131,23 +145,25 @@ class DefaultController extends Controller
         $block2->addStringConfig($str7);
         $block2->addStringConfig($str8);
 
-        //file
-        $file->addBlockConfig($block1);
-        $file->addBlockConfig($block2);
-
-
-        $doc = $this->getDoctrine()->getManager();
         $doc->persist($file);
+        $doc->flush();
+
+        $str1->addMeaning($meanings1);
+        $str1->addMeaning($meanings2);
+
+        $doc->persist($file);
+        $doc->flush();
+
+
+//        $doc->persist($block1);
+
+
         try {
-            $doc->flush();
-
-            return new Response('<div class="bg-success"><h2 class="text-center">Success</h2></div>');
-
+            return new Response('<div class="bg-success"><h2 class="text-center">Success</h2></div>', 200);
         } catch (Exception $e) {
-
-            return new Response('<div class="bg-danger"><h2 class="text-center">' . $e->getMessage() . '</h2></div>');
-
+            return new Response('<div class="bg-danger"><h2 class="text-center">' . $e->getMessage() . '</h2></div>', 200);
         }
+
     }
 
 }
