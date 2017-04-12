@@ -67,7 +67,8 @@ class Meanings
     /**
      * @var StringConf
      *
-     * @ORM\ManyToMany(targetEntity="Jluct\ConfiguratorServerBundle\Entity\StringConf", mappedBy="meanings", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Jluct\ConfiguratorServerBundle\Entity\StringConf", inversedBy="meanings")
+     * @ORM\JoinColumn(name="string_id", referencedColumnName="id")
      */
     private $stringConfig;
 

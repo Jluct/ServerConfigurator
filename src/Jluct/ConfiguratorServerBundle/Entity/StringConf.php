@@ -65,6 +65,77 @@ class StringConf
     private $description;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="activity", type="boolean", nullable=true)
+     */
+    private $activity;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="value", type="string", length=255, nullable=true)
+     */
+    private $value;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Jluct\ConfiguratorServerBundle\Entity\BlockConf", inversedBy="stringConfig")
+     * @ORM\JoinColumn(name="blockConfig_id", referencedColumnName="id")
+     */
+    private $blockConfig;
+
+    /**
+     * @var BlockConf
+     *
+     * @ORM\ManyToMany(targetEntity="StringConf", mappedBy="parent")
+     */
+    private $children;
+
+    /**
+     * @var BlockConf
+     *
+     * @ORM\ManyToMany(targetEntity="StringConf", inversedBy="children")
+     * @ORM\JoinTable(name="string_relation",
+     *     joinColumns={@ORM\JoinColumn(name="parent_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="children_id", referencedColumnName="id")}
+     * )
+     */
+    private $parent;
+
+
+    /**
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param string $value
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isActivity()
+    {
+        return $this->activity;
+    }
+
+    /**
+     * @param boolean $activity
+     */
+    public function setActivity($activity)
+    {
+        $this->activity = $activity;
+    }
+
+    /**
      * @return string
      */
     public function getDescription()
@@ -211,11 +282,36 @@ class StringConf
     }
 
     /**
-     * @ORM\ManyToOne(targetEntity="Jluct\ConfiguratorServerBundle\Entity\BlockConf", inversedBy="stringConfig")
-     * @ORM\JoinColumn(name="blockConfig_id", referencedColumnName="id")
+     * @return BlockConf
      */
-    private $blockConfig;
+    public function getChildren()
+    {
+        return $this->children;
+    }
 
+    /**
+     * @param BlockConf $children
+     */
+    public function setChildren($children)
+    {
+        $this->children = $children;
+    }
+
+    /**
+     * @return BlockConf
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param BlockConf $parent
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
 
     /**
      * Set blockConfig
@@ -244,9 +340,8 @@ class StringConf
     /**
      * @var Meanings
      *
-     * @ORM\ManyToMany(targetEntity="Jluct\ConfiguratorServerBundle\Entity\Meanings", inversedBy="stringConfig", cascade={"persist"})
-     * @ORM\JoinTable(name="string_meanings")
-     * 
+     * @ORM\OneToMany(targetEntity="Jluct\ConfiguratorServerBundle\Entity\Meanings", mappedBy="stringConfig", cascade={"persist"})
+     *
      */
     private $meanings;
 

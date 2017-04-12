@@ -14,11 +14,13 @@ class FileConfRepository extends \Doctrine\ORM\EntityRepository
     {
         $query = $this->getEntityManager()
             ->createQueryBuilder()
-            ->select('f,b,s')
+            ->select('f,b,s,rb')
             ->from('JluctConfiguratorServerBundle:FileConf', 'f')
             ->leftJoin('f.blockConfig', 'b')
             ->leftJoin('b.stringConfig', 's')
+            ->leftJoin('b.dependencies','rb')
             ->where('f.id=:id')
+            ->orderBy('b.orders')
             ->setParameter('id', $id)
             ->getQuery();
 

@@ -2,6 +2,7 @@
 
 namespace Jluct\ConfiguratorServerBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,6 +49,102 @@ class BlockConf
      * @ORM\Column(name="description", type="string", length=500, nullable=true)
      */
     private $description;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="orders", type="integer", nullable=true)
+     */
+    private $orders;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="activity", type="boolean", nullable=true)
+     */
+    private $activity;
+
+    /**
+     * @var BlockConf
+     * Зависимости
+     * @ORM\ManyToMany(targetEntity="BlockConf", mappedBy="dependent")
+     */
+    private $dependencies;
+
+    /**
+     * @var BlockConf
+     * Зависимый
+     * @ORM\ManyToMany(targetEntity="BlockConf", inversedBy="dependencies")
+     * @ORM\JoinTable(name="block_relation",
+     *     joinColumns={@ORM\JoinColumn(name="dependency_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="dependent_id", referencedColumnName="id")}
+     * )
+     */
+    private $dependent;
+
+    /**
+     * @return BlockConf
+     */
+    public function getDependencies()
+    {
+        return $this->dependencies;
+    }
+
+    /**
+     * @param BlockConf $dependencies
+     */
+    public function setDependencies($dependencies)
+    {
+        $this->dependencies = $dependencies;
+    }
+
+    /**
+     * @return BlockConf
+     */
+    public function getDependent()
+    {
+        return $this->dependent;
+    }
+
+    /**
+     * @param BlockConf $dependent
+     */
+    public function setDependent($dependent)
+    {
+        $this->dependent = $dependent;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isActivity()
+    {
+        return $this->activity;
+    }
+
+    /**
+     * @param boolean $activity
+     */
+    public function setActivity($activity)
+    {
+        $this->activity = $activity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
+    /**
+     * @param int $orders
+     */
+    public function setOrders($orders)
+    {
+        $this->orders = $orders;
+    }
 
     /**
      * @return string
@@ -191,8 +288,10 @@ class BlockConf
      */
     public function __construct()
     {
-        $this->stringConfig = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->stringConfig = new ArrayCollection();
         $this->setDate(new \DateTime());
+        $this->dependencies = new ArrayCollection();
+        $this->dependent = new ArrayCollection();
     }
 
     /**

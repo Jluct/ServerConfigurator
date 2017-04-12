@@ -21,6 +21,11 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
+                <a href="#" role="button" class="btn btn-success btn-block">ADD BLOCK</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
                 {% for block in data.blockConfig %}
                     <div class="panel panel-primary">
                         <div class="panel-heading">
@@ -32,7 +37,66 @@
                         <div class="panel-body">
 
                             <div class="row">
-                                <div class="col-sm-6"></div>
+                                <div class="col-sm-6">
+
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <li role="presentation" class="active"><a href="#info_{{ block.id }}"
+                                                                                  aria-controls="info"
+                                                                                  role="tab" data-toggle="tab">Info</a>
+                                        </li>
+                                        <li role="presentation"><a href="#dependencies_{{ block.id }}"
+                                                                   aria-controls="dependencies"
+                                                                   role="tab" data-toggle="tab">Dependencies</a></li>
+
+                                        <li role="presentation"><a href="#dependent_{{ block.id }}"
+                                                                   aria-controls="dependent"
+                                                                   role="tab" data-toggle="tab">Dependent</a></li>
+                                    </ul>
+
+                                    <!-- Tab panes -->
+                                    <div class="tab-content">
+
+                                        <div role="tabpanel" class="tab-pane active" id="info_{{ block.id }}">
+                                            <ul class="list-group">
+                                                <li class="list-group-item"><b>Orders</b> - {{ block.orders }}</li>
+                                                <li class="list-group-item"><b>Activity</b> - {{ block.activity }}</li>
+                                                <li class="list-group-item"><b>Created</b>
+                                                    - {{ block.date|date('d-m-Y H:i:s') }}</li>
+                                                <li class="list-group-item"><b>Orders</b> - {{ block.orders }}</li>
+
+                                            </ul>
+                                        </div>
+
+                                        <div role="tabpanel" class="tab-pane" id="dependencies_{{ block.id }}">
+                                            {% if block.dependencies %}
+                                                <ul class="list-group">
+                                                {% for dependency in block.dependencies %}
+                                                    <li class="list-group-item">{{ dependency.name }}</li>
+                                                {% endfor %}
+                                            {% else %}
+                                                <p>EMPTY :(</p>
+
+                                                </ul>
+                                            {% endif %}
+                                        </div>
+
+                                        <div role="tabpanel" class="tab-pane" id="dependent_{{ block.id }}">
+                                            {% if block.dependent %}
+                                                <ul class="list-group">
+                                                {% for dependency in block.dependent %}
+                                                    <li class="list-group-item">{{ dependency.name }}</li>
+                                                {% endfor %}
+                                            {% else %}
+                                                <p>EMPTY :(</p>
+
+                                                </ul>
+                                            {% endif %}
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
                                 <div class="col-sm-6">
                                     <h4>Description</h4>
                                     <p>
@@ -76,13 +140,15 @@
                                                     {% endif %}
                                                 </td>
                                                 <td>{{ string.byDefault }}</td>
-                                                <td>empty :(</td>
+                                                <td>{% if string.value %}{{ string.value }} {% else %}empty :({% endif %}</td>
                                                 <td>
                                                     <a href="#" role="button" class="btn btn-info" title="Reviews">
                                                         <span class="glyphicon glyphicon-eye-open"
                                                               aria-hidden="true"></span>
                                                     </a>
-                                                    <a href="#" role="button" class="btn btn-warning" title="Block">
+                                                    <a href="#" role="button"
+                                                       class="btn btn-{% if string.activity %}warning {% else %}success{% endif %}"
+                                                       title="Block">
                                                         <span class="glyphicon glyphicon-remove"
                                                               aria-hidden="true"></span>
                                                     </a>
@@ -90,6 +156,7 @@
                                                         <span class="glyphicon glyphicon-trash"
                                                               aria-hidden="true"></span>
                                                     </a>
+
                                                 </td>
                                             </tr>
                                         {% endfor %}
@@ -106,28 +173,17 @@
                                 </table>
                             </div>
 
-                            {#<ul class="list-group">#}
-
-                            {#{% if block.stringConfig is not empty %}#}
-                            {#{% for string in block.stringConfig %}#}
-                            {#<li class="list-group-item">{{ string.name }}</li>#}
-
-                            {#{% endfor %}#}
-                            {#{% else %}#}
-                            {#<h3>Empty ):</h3>#}
-                            {#{% endif %}#}
-
-                            {#</ul>#}
-
                         </div>
                         <div class="panel-footer ">
 
-                            <h4>What you want?</h4>
                             <a href="#" role="button" class="btn btn-info" title="Reviews">
                                 <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                             </a>
-                            <a href="#" role="button" class="btn btn-warning" title="Block">
-                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            <a href="#" role="button"
+                               class="btn btn-{% if block.activity %}warning {% else %}success{% endif %}"
+                               title="Block">
+                                <span class="glyphicon glyphicon-{% if block.activity %}remove {% else %}ok{% endif %}"
+                                      aria-hidden="true"></span>
                             </a>
                             <a href="#" role="button" class="btn btn-danger" title="Delete">
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
