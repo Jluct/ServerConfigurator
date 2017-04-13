@@ -32,12 +32,13 @@ class BlockConfType extends AbstractType
             ])
             ->add('date', DateTimeType::class, [
                 'attr' => [
-                    'class' => 'form-control'
+//                    'class' => 'form-control'
                 ]
             ])
             ->add('description', TextareaType::class, [
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'rows' => '4'
                 ]
             ])
             ->add('orders', IntegerType::class, [
