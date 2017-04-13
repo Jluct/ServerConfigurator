@@ -12,3 +12,8 @@ jluct_configurator_server_get_file_config:
     methods: [GET]
     requirements:
         id: '\d+'
+
+jluct_configurator_server_admin_add_block:
+    path: /admin/block/add
+    defaults: {_controller: JluctConfiguratorServerBundle:Admin:AddBlock}
+    methods: [GET]

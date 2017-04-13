@@ -1,0 +1,26 @@
+{% extends 'JluctConfiguratorServerBundle::layout.html.twig' %}
+
+
+{% block body %}
+    <section class="container">
+        <div class="row">
+            <div class="col-sm-12">
+
+                {#{% for tag in form %}#}
+                    {#<div>{{ tag }}</div>#}
+                {#{% endfor %}#}
+
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <input type="submit" class="btn btn-success btn-raised" value="Создать запись">
+
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
