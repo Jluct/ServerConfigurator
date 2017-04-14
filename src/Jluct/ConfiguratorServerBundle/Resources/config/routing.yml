@@ -7,13 +7,15 @@ jluct_configurator_server_add_data:
     defaults: { _controller: JluctConfiguratorServerBundle:Default:addData }
 
 jluct_configurator_server_get_file_config:
-    path: /file/{id}
+    path:     /file/{id}
     defaults: {_controller: JluctConfiguratorServerBundle:Default:getSettingFile}
-    methods: [GET]
+    methods:  [GET]
     requirements:
         id: '\d+'
 
 jluct_configurator_server_admin_add_block:
-    path: /admin/block/add
+    path:     /admin/file/{file_id}/block/add
     defaults: {_controller: JluctConfiguratorServerBundle:Admin:AddBlock}
-    methods: [GET]
+
+    requirements:
+        file_id: '\d+'

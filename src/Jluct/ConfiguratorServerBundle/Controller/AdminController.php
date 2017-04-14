@@ -15,11 +15,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class AdminController extends Controller
 {
-    public function AddBlockAction()
+    public function AddBlockAction($file_id)
     {
         $block = new BlockConf();
 
-        $form = $this->createForm(BlockConfType::class, $block);
+        $form = $this->createForm(BlockConfType::class, $block, [
+//            'data' => $this->getDoctrine()->getRepository('JluctConfiguratorServerBundle:BlockConf')->findBy(['fileConfig' => $file_id])
+        ]);
 
         return $this->render("JluctConfiguratorServerBundle:admin:block.html.twig", ['form' => $form->createView()]);
     }

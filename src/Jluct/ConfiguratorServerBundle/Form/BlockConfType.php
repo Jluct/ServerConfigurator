@@ -2,15 +2,18 @@
 
 namespace Jluct\ConfiguratorServerBundle\Form;
 
+use Jluct\ConfiguratorServerBundle\Entity\BlockConf;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+
+use Symfony\Component\VarDumper\VarDumper;
 
 class BlockConfType extends AbstractType
 {
@@ -19,6 +22,9 @@ class BlockConfType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
+        VarDumper::dump($options);
+
         $builder
             ->add('name', TextType::class, [
                 'attr' => [
@@ -51,7 +57,19 @@ class BlockConfType extends AbstractType
 //                    'class' => 'form-control'
                 ]
             ])
-//            ->add('dependencies')
+            ->add('dependencies', ChoiceType::class, [
+                'choices' => $options['block'],
+                'choice_label' => function (BlockConf $blockConf, $key, $index) {
+                    return $blockConf->getName();
+                },
+//                'choice_value' => function (BlockConf $blockConf) {
+//                    return $blockConf->getId();
+//                }
+                'choice_attr' => function ($blockConf, $key, $index) {
+                    return ['class' => 'category_' . strtolower($blockConf->getName())];
+                },
+
+            ])
 //            ->add('dependent')
 //            ->add('fileConfig')
             ->getForm();
