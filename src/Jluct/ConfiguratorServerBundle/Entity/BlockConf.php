@@ -25,14 +25,13 @@ class BlockConf
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="required", type="boolean", nullable=true)
      */
     private $required;
@@ -59,7 +58,6 @@ class BlockConf
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="activity", type="boolean", nullable=true)
      */
     private $activity;
@@ -67,14 +65,14 @@ class BlockConf
     /**
      * @var BlockConf
      * Зависимости
-     * @ORM\ManyToMany(targetEntity="BlockConf", mappedBy="dependent")
+     * @ORM\ManyToMany(targetEntity="BlockConf", mappedBy="dependent", cascade={"persist"})
      */
     private $dependencies;
 
     /**
      * @var BlockConf
      * Зависимый
-     * @ORM\ManyToMany(targetEntity="BlockConf", inversedBy="dependencies")
+     * @ORM\ManyToMany(targetEntity="BlockConf", inversedBy="dependencies", cascade={"persist"})
      * @ORM\JoinTable(name="block_relation",
      *     joinColumns={@ORM\JoinColumn(name="dependency_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="dependent_id", referencedColumnName="id")}
@@ -95,7 +93,8 @@ class BlockConf
      */
     public function setDependencies($dependencies)
     {
-        $this->dependencies = $dependencies;
+        if (!is_null($dependencies))
+            $this->dependencies->add($dependencies);
     }
 
     /**
@@ -111,7 +110,8 @@ class BlockConf
      */
     public function setDependent($dependent)
     {
-        $this->dependent = $dependent;
+        if (!is_null($dependent))
+            $this->dependent->add($dependent);
     }
 
     /**
@@ -288,8 +288,8 @@ class BlockConf
      */
     public function __construct()
     {
-        $this->stringConfig = new ArrayCollection();
         $this->setDate(new \DateTime());
+        $this->stringConfig = new ArrayCollection();
         $this->dependencies = new ArrayCollection();
         $this->dependent = new ArrayCollection();
     }
