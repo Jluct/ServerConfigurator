@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * FileConf
  *
- * @ORM\Table(name="file_conf")
+ * @ORM\Table(name="FileConf")
  * @ORM\Entity(repositoryClass="Jluct\ConfiguratorServerBundle\Repository\FileConfRepository")
  */
 class FileConf
@@ -43,6 +43,28 @@ class FileConf
      */
     private $date;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=500, nullable=true)
+     */
+    private $description;
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
 
     /**
      * Get id
@@ -129,7 +151,7 @@ class FileConf
     /**
      * @var
      *
-     * @ORM\OneToMany(targetEntity="Jluct\ConfiguratorServerBundle\Entity\BlockConf", mappedBy="fileConfig")
+     * @ORM\OneToMany(targetEntity="Jluct\ConfiguratorServerBundle\Entity\BlockConf", mappedBy="fileConfig", cascade={"persist"})
      */
     private $blockConfig;
 
@@ -139,6 +161,7 @@ class FileConf
     public function __construct()
     {
         $this->blockConfig = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->setDate(new \DateTime());
     }
 
     /**

@@ -81,40 +81,6 @@ class BlockConf
     private $dependent;
 
     /**
-     * @return BlockConf
-     */
-    public function getDependencies()
-    {
-        return $this->dependencies;
-    }
-
-    /**
-     * @param BlockConf $dependencies
-     */
-    public function setDependencies($dependencies)
-    {
-        if (!is_null($dependencies))
-            $this->dependencies->add($dependencies);
-    }
-
-    /**
-     * @return BlockConf
-     */
-    public function getDependent()
-    {
-        return $this->dependent;
-    }
-
-    /**
-     * @param BlockConf $dependent
-     */
-    public function setDependent($dependent)
-    {
-        if (!is_null($dependent))
-            $this->dependent->add($dependent);
-    }
-
-    /**
      * @return boolean
      */
     public function isActivity()
@@ -326,5 +292,83 @@ class BlockConf
     public function getStringConfig()
     {
         return $this->stringConfig;
+    }
+
+    /**
+     * Get activity
+     *
+     * @return boolean
+     */
+    public function getActivity()
+    {
+        return $this->activity;
+    }
+
+    /**
+     * Add dependency
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\BlockConf $dependency
+     *
+     * @return BlockConf
+     */
+    public function addDependency(\Jluct\ConfiguratorServerBundle\Entity\BlockConf $dependency)
+    {
+        $this->dependencies[] = $dependency;
+
+        return $this;
+    }
+
+    /**
+     * Remove dependency
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\BlockConf $dependency
+     */
+    public function removeDependency(\Jluct\ConfiguratorServerBundle\Entity\BlockConf $dependency)
+    {
+        $this->dependencies->removeElement($dependency);
+    }
+
+    /**
+     * Get dependencies
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDependencies()
+    {
+        return $this->dependencies;
+    }
+
+    /**
+     * Add dependent
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\BlockConf $dependent
+     *
+     * @return BlockConf
+     */
+    public function addDependent(\Jluct\ConfiguratorServerBundle\Entity\BlockConf $dependent)
+    {
+        $this->dependent[] = $dependent;
+
+        return $this;
+    }
+
+    /**
+     * Remove dependent
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\BlockConf $dependent
+     */
+    public function removeDependent(\Jluct\ConfiguratorServerBundle\Entity\BlockConf $dependent)
+    {
+        $this->dependent->removeElement($dependent);
+    }
+
+    /**
+     * Get dependent
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDependent()
+    {
+        return $this->dependent;
     }
 }

@@ -383,4 +383,62 @@ class StringConf
     {
         return $this->meanings;
     }
+
+    /**
+     * Get activity
+     *
+     * @return boolean
+     */
+    public function getActivity()
+    {
+        return $this->activity;
+    }
+
+    /**
+     * Add child
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $child
+     *
+     * @return StringConf
+     */
+    public function addChild(\Jluct\ConfiguratorServerBundle\Entity\StringConf $child)
+    {
+        $this->children[] = $child;
+
+        return $this;
+    }
+
+    /**
+     * Remove child
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $child
+     */
+    public function removeChild(\Jluct\ConfiguratorServerBundle\Entity\StringConf $child)
+    {
+        $this->children->removeElement($child);
+    }
+
+    /**
+     * Add parent
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $parent
+     *
+     * @return StringConf
+     */
+    public function addParent(\Jluct\ConfiguratorServerBundle\Entity\StringConf $parent)
+    {
+        $this->parent[] = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Remove parent
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $parent
+     */
+    public function removeParent(\Jluct\ConfiguratorServerBundle\Entity\StringConf $parent)
+    {
+        $this->parent->removeElement($parent);
+    }
 }

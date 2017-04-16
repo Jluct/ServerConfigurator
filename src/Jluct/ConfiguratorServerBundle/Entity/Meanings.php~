@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Meanings
  *
- * @ORM\Table(name="meanings")
+ * @ORM\Table(name="Meanings")
  * @ORM\Entity(repositoryClass="Jluct\ConfiguratorServerBundle\Repository\MeaningsRepository")
  */
 class Meanings
@@ -67,8 +67,8 @@ class Meanings
     /**
      * @var StringConf
      *
-     * @ORM\ManyToMany(targetEntity="Jluct\ConfiguratorServerBundle\Entity\StringConf", inversedBy="meanings")
-     * @ORM\JoinTable(name="string_meanings")
+     * @ORM\ManyToOne(targetEntity="Jluct\ConfiguratorServerBundle\Entity\StringConf", inversedBy="meanings")
+     * @ORM\JoinColumn(name="string_id", referencedColumnName="id")
      */
     private $stringConfig;
 

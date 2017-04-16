@@ -2,12 +2,14 @@
 
 namespace Jluct\ConfiguratorServerBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * BlockConf
  *
- * @ORM\Table(name="block_conf")
+ * @ORM\Table(name="BlockConf")
  * @ORM\Entity(repositoryClass="Jluct\ConfiguratorServerBundle\Repository\BlockConfRepository")
  */
 class BlockConf
@@ -23,24 +25,142 @@ class BlockConf
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="required", type="boolean", nullable=true)
      */
     private $required;
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=500, nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="orders", type="integer", nullable=true)
+     */
+    private $orders;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="activity", type="boolean", nullable=true)
+     */
+    private $activity;
+
+    /**
+     * @var BlockConf
+     * Зависимости
+     * @ORM\ManyToMany(targetEntity="BlockConf", mappedBy="dependent", cascade={"persist"})
+     */
+    private $dependencies;
+
+    /**
+     * @var BlockConf
+     * Зависимый
+     * @ORM\ManyToMany(targetEntity="BlockConf", inversedBy="dependencies", cascade={"persist"})
+     * @ORM\JoinTable(name="block_relation",
+     *     joinColumns={@ORM\JoinColumn(name="dependency_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="dependent_id", referencedColumnName="id")}
+     * )
+     */
+    private $dependent;
+
+//    /**
+//     * @return BlockConf
+//     */
+//    public function getDependencies()
+//    {
+//        return $this->dependencies;
+//    }
+//
+//    /**
+//     * @param BlockConf $dependencies
+//     */
+//    public function setDependencies($dependencies)
+//    {
+//        if (!is_null($dependencies))
+//            $this->dependencies->add($dependencies);
+//    }
+//
+//    /**
+//     * @return BlockConf
+//     */
+//    public function getDependent()
+//    {
+//        return $this->dependent;
+//    }
+//
+//    /**
+//     * @param BlockConf $dependent
+//     */
+//    public function setDependent($dependent)
+//    {
+//        if (!is_null($dependent))
+//            $this->dependent->add($dependent);
+//    }
+
+    /**
+     * @return boolean
+     */
+    public function isActivity()
+    {
+        return $this->activity;
+    }
+
+    /**
+     * @param boolean $activity
+     */
+    public function setActivity($activity)
+    {
+        $this->activity = $activity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
+    /**
+     * @param int $orders
+     */
+    public function setOrders($orders)
+    {
+        $this->orders = $orders;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
 
 
     /**
@@ -159,7 +279,7 @@ class BlockConf
     /**
      * @var
      *
-     * @ORM\OneToMany(targetEntity="Jluct\ConfiguratorServerBundle\Entity\StringConf", mappedBy="blockConfig")
+     * @ORM\OneToMany(targetEntity="Jluct\ConfiguratorServerBundle\Entity\StringConf", mappedBy="blockConfig", cascade={"persist"})
      */
     private $stringConfig;
 
@@ -168,7 +288,10 @@ class BlockConf
      */
     public function __construct()
     {
-        $this->stringConfig = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->setDate(new \DateTime());
+        $this->stringConfig = new ArrayCollection();
+        $this->dependencies = new ArrayCollection();
+        $this->dependent = new ArrayCollection();
     }
 
     /**

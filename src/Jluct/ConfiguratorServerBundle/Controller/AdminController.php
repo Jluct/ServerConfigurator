@@ -38,19 +38,22 @@ class AdminController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $block->getDate();
 
-            VarDumper::dump($block);
-//            $em = $this->getDoctrine()->getManager();
+            if ($block->getDependencies()) {
+                $em->transactional(function ($em) use (&$block) {
 
-//            $em->getRepository('JluctConfiguratorServerBundle:BlockConf');
-            $em->persist($block);
-            $em->flush();
+                    foreach ($block->getDependencies() as $item) {
+                        $item->addDependent($block);
+                        $em->persist($item);
+                        $em->flush();
+                    }
 
-//            if ($block->getDependencies()) {
-//                $block->setDependent($block);
-//
-//                $em->persist($block);
-//                $em->flush();
-//            }
+                    VarDumper::dump($block);
+                    $em->persist($block);
+                    $em->flush();
+                });
+
+            }
+
 
             $this->addFlash('success', 'post.created_successfully');
 

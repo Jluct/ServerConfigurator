@@ -110,4 +110,18 @@ class Meanings
     {
         return $this->stringConfig;
     }
+
+    /**
+     * Set stringConfig
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $stringConfig
+     *
+     * @return Meanings
+     */
+    public function setStringConfig(\Jluct\ConfiguratorServerBundle\Entity\StringConf $stringConfig = null)
+    {
+        $this->stringConfig = $stringConfig;
+
+        return $this;
+    }
 }
