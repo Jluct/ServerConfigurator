@@ -4,11 +4,9 @@ namespace Jluct\ConfiguratorServerBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
 use Jluct\ConfiguratorServerBundle\Entity\BlockConf;
-use Symfony\Bridge\Doctrine\Form\Type\DoctrineType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -78,30 +76,6 @@ class BlockConfType extends AbstractType
                 'required' => false,
 
             ])
-//            ->add('dependencies', ChoiceType::class, [
-//                'required' => false,
-//                'choices' => $blocks,
-//                'multiple' => true,
-//                'choice_label' => function (BlockConf $blockConf, $key, $index) {
-//                    return $blockConf->getName();
-//                },
-//                'choice_value' => function ($blockConf) {
-//                    if (method_exists($blockConf, 'getId'))
-//                        return $blockConf->getId();
-//                },
-//                'choice_attr' => function ($blockConf, $key, $index) {
-//                    return [
-//                        'class' => 'block_dependencies_' . $blockConf->getId()
-//                    ];
-//                },
-////                'group_by'=>'',
-//
-////                'placeholder' => 'select dependencies'
-//
-//
-//            ])
-//            ->add('dependent')
-//            ->add('fileConfig')
             ->getForm();
     }
 

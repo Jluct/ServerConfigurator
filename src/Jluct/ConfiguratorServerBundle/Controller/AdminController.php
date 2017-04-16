@@ -25,15 +25,11 @@ class AdminController extends Controller
 
         $block->setFileConfig($em->getRepository('JluctConfiguratorServerBundle:FileConf')->findOneBy(['id' => $file_id]));
 
-        //$this->getDoctrine()->getRepository('JluctConfiguratorServerBundle:BlockConf')->findBy(['fileConfig' => $file_id])
-
         $form = $this->createForm(BlockConfType::class, $block, [
             'entity_manager' => $em
         ]);
 
         $form->handleRequest($request);
-//        VarDumper::dump($form);
-
 
         if ($form->isSubmitted() && $form->isValid()) {
             $block->getDate();
@@ -53,14 +49,12 @@ class AdminController extends Controller
                 });
 
             }
-
-
+            
             $this->addFlash('success', 'post.created_successfully');
 
             VarDumper::dump($block);
         }
-
-
+        
         return $this->render("JluctConfiguratorServerBundle:admin:block.html.twig", ['form' => $form->createView()]);
     }
 }
