@@ -25,10 +25,6 @@ class BlockConfType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-//        $em = $options['entity_manager']->getRepository('JluctConfiguratorServerBundle:BlockConf');
-//        $blocks = $em->findBy(['fileConfig' => $options['data']->getFileConfig()->getId()]);
-
-//        VarDumper::dump($blocks);
 
         $builder
             ->add('name', TextType::class, [
@@ -87,7 +83,7 @@ class BlockConfType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'Jluct\ConfiguratorServerBundle\Entity\BlockConf'
         ));
-        $resolver->setRequired('entity_manager');
+//        $resolver->setRequired('entity_manager');
     }
 
     /**

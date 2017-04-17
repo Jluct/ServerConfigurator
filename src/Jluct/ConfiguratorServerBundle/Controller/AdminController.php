@@ -25,9 +25,7 @@ class AdminController extends Controller
 
         $block->setFileConfig($em->getRepository('JluctConfiguratorServerBundle:FileConf')->findOneBy(['id' => $file_id]));
 
-        $form = $this->createForm(BlockConfType::class, $block, [
-            'entity_manager' => $em
-        ]);
+        $form = $this->createForm(BlockConfType::class, $block);
 
         $form->handleRequest($request);
         VarDumper::dump($form);
