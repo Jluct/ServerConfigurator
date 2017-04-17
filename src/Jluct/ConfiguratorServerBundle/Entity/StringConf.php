@@ -86,21 +86,74 @@ class StringConf
 
     /**
      * @var BlockConf
-     *
-     * @ORM\ManyToMany(targetEntity="StringConf", mappedBy="parent")
+     * @ORM\ManyToMany(targetEntity="StringConf", inversedBy="dependent", cascade={"all"})
+     * @ORM\JoinTable(name="string_relation",
+     *     joinColumns={@ORM\JoinColumn(name="dependent_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="dependency_id", referencedColumnName="id")}
+     * )
      */
-    private $children;
+    private $dependencies;
 
     /**
      * @var BlockConf
-     *
-     * @ORM\ManyToMany(targetEntity="StringConf", inversedBy="children")
-     * @ORM\JoinTable(name="string_relation",
-     *     joinColumns={@ORM\JoinColumn(name="parent_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="children_id", referencedColumnName="id")}
-     * )
+     * @ORM\ManyToMany(targetEntity="StringConf", mappedBy="dependencies", cascade={"all"})
      */
-    private $parent;
+    private $dependent;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="datetime")
+     */
+    private $date;
+
+    /**
+     * @return mixed
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param mixed $date
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+    }
+
+    /**
+     * @return BlockConf
+     */
+    public function getDependencies()
+    {
+        return $this->dependencies;
+    }
+
+    /**
+     * @param BlockConf $dependencies
+     */
+    public function setDependencies($dependencies)
+    {
+        $this->dependencies[] = $dependencies;
+    }
+
+    /**
+     * @return BlockConf
+     */
+    public function getDependent()
+    {
+        return $this->dependent;
+    }
+
+    /**
+     * @param BlockConf $dependent
+     */
+    public function setDependent($dependent)
+    {
+        $this->dependent[] = $dependent;
+    }
 
 
     /**
@@ -282,38 +335,6 @@ class StringConf
     }
 
     /**
-     * @return BlockConf
-     */
-    public function getChildren()
-    {
-        return $this->children;
-    }
-
-    /**
-     * @param BlockConf $children
-     */
-    public function setChildren($children)
-    {
-        $this->children = $children;
-    }
-
-    /**
-     * @return BlockConf
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
-     * @param BlockConf $parent
-     */
-    public function setParent($parent)
-    {
-        $this->parent = $parent;
-    }
-
-    /**
      * Set blockConfig
      *
      * @param \Jluct\ConfiguratorServerBundle\Entity\BlockConf $blockConfig
@@ -345,9 +366,13 @@ class StringConf
      */
     private $meanings;
 
+
     public function __construct()
     {
         $this->meanings = new ArrayCollection();
+        $this->dependencies = new ArrayCollection();
+        $this->dependent = new ArrayCollection();
+        $this->date = new \DateTime();
     }
 
     /**
@@ -440,5 +465,53 @@ class StringConf
     public function removeParent(\Jluct\ConfiguratorServerBundle\Entity\StringConf $parent)
     {
         $this->parent->removeElement($parent);
+    }
+
+    /**
+     * Add dependency
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $dependency
+     *
+     * @return StringConf
+     */
+    public function addDependency(\Jluct\ConfiguratorServerBundle\Entity\StringConf $dependency)
+    {
+        $this->dependencies[] = $dependency;
+
+        return $this;
+    }
+
+    /**
+     * Remove dependency
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $dependency
+     */
+    public function removeDependency(\Jluct\ConfiguratorServerBundle\Entity\StringConf $dependency)
+    {
+        $this->dependencies->removeElement($dependency);
+    }
+
+    /**
+     * Add dependent
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $dependent
+     *
+     * @return StringConf
+     */
+    public function addDependent(\Jluct\ConfiguratorServerBundle\Entity\StringConf $dependent)
+    {
+        $this->dependent[] = $dependent;
+
+        return $this;
+    }
+
+    /**
+     * Remove dependent
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $dependent
+     */
+    public function removeDependent(\Jluct\ConfiguratorServerBundle\Entity\StringConf $dependent)
+    {
+        $this->dependent->removeElement($dependent);
     }
 }

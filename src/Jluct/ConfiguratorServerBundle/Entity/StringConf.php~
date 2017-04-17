@@ -86,21 +86,74 @@ class StringConf
 
     /**
      * @var BlockConf
-     *
-     * @ORM\ManyToMany(targetEntity="StringConf", mappedBy="parent")
+     * @ORM\ManyToMany(targetEntity="StringConf", inversedBy="dependent", cascade={"all"})
+     * @ORM\JoinTable(name="string_relation",
+     *     joinColumns={@ORM\JoinColumn(name="dependent_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="dependency_id", referencedColumnName="id")}
+     * )
      */
-    private $children;
+    private $dependencies;
+
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(name="date", type="datetime")
+     */
+    private $date;
+
+    /**
+     * @return mixed
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param mixed $date
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+    }
+
+    /**
+     * @return BlockConf
+     */
+    public function getDependencies()
+    {
+        return $this->dependencies;
+    }
+
+    /**
+     * @param BlockConf $dependencies
+     */
+    public function setDependencies($dependencies)
+    {
+        $this->dependencies[] = $dependencies;
+    }
+
+    /**
+     * @return BlockConf
+     */
+    public function getDependent()
+    {
+        return $this->dependent;
+    }
+
+    /**
+     * @param BlockConf $dependent
+     */
+    public function setDependent($dependent)
+    {
+        $this->dependent[] = $dependent;
+    }
 
     /**
      * @var BlockConf
-     *
-     * @ORM\ManyToMany(targetEntity="StringConf", inversedBy="children")
-     * @ORM\JoinTable(name="string_relation",
-     *     joinColumns={@ORM\JoinColumn(name="parent_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="children_id", referencedColumnName="id")}
-     * )
+     * @ORM\ManyToMany(targetEntity="StringConf", mappedBy="dependencies", cascade={"all"})
      */
-    private $parent;
+    private $dependent;
 
 
     /**
@@ -282,38 +335,6 @@ class StringConf
     }
 
     /**
-     * @return BlockConf
-     */
-    public function getChildren()
-    {
-        return $this->children;
-    }
-
-    /**
-     * @param BlockConf $children
-     */
-    public function setChildren($children)
-    {
-        $this->children = $children;
-    }
-
-    /**
-     * @return BlockConf
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
-     * @param BlockConf $parent
-     */
-    public function setParent($parent)
-    {
-        $this->parent = $parent;
-    }
-
-    /**
      * Set blockConfig
      *
      * @param \Jluct\ConfiguratorServerBundle\Entity\BlockConf $blockConfig
@@ -345,9 +366,13 @@ class StringConf
      */
     private $meanings;
 
+
     public function __construct()
     {
         $this->meanings = new ArrayCollection();
+        $this->dependencies = new ArrayCollection();
+        $this->dependent = new ArrayCollection();
+        $this->date = new \DateTime();
     }
 
     /**
@@ -382,5 +407,63 @@ class StringConf
     public function getMeanings()
     {
         return $this->meanings;
+    }
+
+    /**
+     * Get activity
+     *
+     * @return boolean
+     */
+    public function getActivity()
+    {
+        return $this->activity;
+    }
+
+    /**
+     * Add child
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $child
+     *
+     * @return StringConf
+     */
+    public function addChild(\Jluct\ConfiguratorServerBundle\Entity\StringConf $child)
+    {
+        $this->children[] = $child;
+
+        return $this;
+    }
+
+    /**
+     * Remove child
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $child
+     */
+    public function removeChild(\Jluct\ConfiguratorServerBundle\Entity\StringConf $child)
+    {
+        $this->children->removeElement($child);
+    }
+
+    /**
+     * Add parent
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $parent
+     *
+     * @return StringConf
+     */
+    public function addParent(\Jluct\ConfiguratorServerBundle\Entity\StringConf $parent)
+    {
+        $this->parent[] = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Remove parent
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $parent
+     */
+    public function removeParent(\Jluct\ConfiguratorServerBundle\Entity\StringConf $parent)
+    {
+        $this->parent->removeElement($parent);
     }
 }

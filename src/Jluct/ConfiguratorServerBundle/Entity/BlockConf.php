@@ -64,19 +64,17 @@ class BlockConf
 
     /**
      * @var BlockConf
-     * Зависимости
-     * @ORM\ManyToMany(targetEntity="BlockConf", mappedBy="dependent", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="BlockConf", inversedBy="dependent", cascade={"all"})
+     * @ORM\JoinTable(name="block_relation",
+     *     joinColumns={@ORM\JoinColumn(name="dependent_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="dependency_id", referencedColumnName="id")}
+     * )
      */
     private $dependencies;
 
     /**
      * @var BlockConf
-     * Зависимый
-     * @ORM\ManyToMany(targetEntity="BlockConf", inversedBy="dependencies", cascade={"persist"})
-     * @ORM\JoinTable(name="block_relation",
-     *     joinColumns={@ORM\JoinColumn(name="dependency_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="dependent_id", referencedColumnName="id")}
-     * )
+     * @ORM\ManyToMany(targetEntity="BlockConf", mappedBy="dependencies", cascade={"all"})
      */
     private $dependent;
 

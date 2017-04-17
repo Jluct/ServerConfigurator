@@ -3,33 +3,22 @@
 namespace Jluct\ConfiguratorServerBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
-use Jluct\ConfiguratorServerBundle\Entity\BlockConf;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use Symfony\Component\VarDumper\VarDumper;
-
-class BlockConfType extends AbstractType
+class StringConfType extends AbstractType
 {
     /**
      * {@inheritdoc}
-     *
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
-//        $em = $options['entity_manager']->getRepository('JluctConfiguratorServerBundle:BlockConf');
-//        $blocks = $em->findBy(['fileConfig' => $options['data']->getFileConfig()->getId()]);
-
-//        VarDumper::dump($blocks);
-
         $builder
             ->add('name', TextType::class, [
                 'attr' => [
@@ -38,13 +27,22 @@ class BlockConfType extends AbstractType
             ])
             ->add('required', CheckboxType::class, [
                 'required' => false,
+                'attr' => []
+            ])
+            ->add('type', TextType::class, [
                 'attr' => [
-//                    'class' => 'form-control'
+                    'class' => 'form-control'
                 ]
             ])
-            ->add('date', DateTimeType::class, [
+            ->add('byDefault', TextType::class, [
                 'attr' => [
-//                    'class' => 'form-control'
+                    'class' => 'form-control'
+                ]
+            ])
+            ->add('orders', IntegerType::class, [
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control'
                 ]
             ])
             ->add('description', TextareaType::class, [
@@ -54,20 +52,17 @@ class BlockConfType extends AbstractType
                     'rows' => '4'
                 ]
             ])
-            ->add('orders', IntegerType::class, [
+            ->add('activity', CheckboxType::class, [
                 'required' => false,
+                'attr' => []
+            ])
+            ->add('value', TextType::class, [
                 'attr' => [
                     'class' => 'form-control'
                 ]
             ])
-            ->add('activity', CheckboxType::class, [
-                'required' => false,
-                'attr' => [
-//                    'class' => 'form-control'
-                ]
-            ])
             ->add('dependencies', EntityType::class, [
-                'class' => 'Jluct\ConfiguratorServerBundle\Entity\BlockConf',
+                'class' => 'Jluct\ConfiguratorServerBundle\Entity\StringConf',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('b');
                 },
@@ -77,6 +72,7 @@ class BlockConfType extends AbstractType
 
             ])
             ->getForm();
+//            ->add('blockConfig')
     }
 
     /**
@@ -85,9 +81,8 @@ class BlockConfType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Jluct\ConfiguratorServerBundle\Entity\BlockConf'
+            'data_class' => 'Jluct\ConfiguratorServerBundle\Entity\StringConf'
         ));
-        $resolver->setRequired('entity_manager');
     }
 
     /**
@@ -95,7 +90,7 @@ class BlockConfType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'jluct_configuratorserverbundle_blockconf';
+        return 'jluct_configuratorserverbundle_stringconf';
     }
 
 

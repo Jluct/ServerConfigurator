@@ -29,7 +29,7 @@ class DefaultController extends Controller
 
         $data = $em->getFileAllData($id);
 
-        VarDumper::dump($data);
+        VarDumper::dump($data[0]);
 
         return $this->render('JluctConfiguratorServerBundle:Default:file-config.html.twig', [
                 'data' => $data[0]

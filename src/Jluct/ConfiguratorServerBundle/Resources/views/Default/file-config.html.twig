@@ -69,8 +69,10 @@
                                         </div>
 
                                         <div role="tabpanel" class="tab-pane" id="dependencies_{{ block.id }}">
-                                            {% if block.dependencies %}
+                                            {% if block.dependencies is not empty %}
                                                 <ul class="list-group">
+                                                <li class="list-group-item list-group-item-info"><b>TOTAL</b>
+                                                    - {{ block.dependencies|length }}</li>
                                                 {% for dependency in block.dependencies %}
                                                     <li class="list-group-item">{{ dependency.name }}</li>
                                                 {% endfor %}
@@ -82,8 +84,11 @@
                                         </div>
 
                                         <div role="tabpanel" class="tab-pane" id="dependent_{{ block.id }}">
-                                            {% if block.dependent %}
+                                            {% if block.dependent is not empty %}
                                                 <ul class="list-group">
+                                                <li class="list-group-item list-group-item-info"><b>TOTAL</b>
+                                                    - {{ block.dependent|length }}
+                                                </li>
                                                 {% for dependency in block.dependent %}
                                                     <li class="list-group-item">{{ dependency.name }}</li>
                                                 {% endfor %}
@@ -177,7 +182,8 @@
                         </div>
                         <div class="panel-footer ">
 
-                            <a href="#" role="button" class="btn btn-info" title="Reviews">
+                            <a href="{{ path('jluct_configurator_server_admin_edit_block', {'block_id':block.id}) }}"
+                               role="button" class="btn btn-info" title="Reviews">
                                 <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                             </a>
                             <a href="#" role="button"

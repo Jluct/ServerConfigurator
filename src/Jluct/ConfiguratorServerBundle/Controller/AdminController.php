@@ -30,31 +30,60 @@ class AdminController extends Controller
         ]);
 
         $form->handleRequest($request);
+        VarDumper::dump($form);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $block->getDate();
 
-            if ($block->getDependencies()) {
-                $em->transactional(function ($em) use (&$block) {
+            $em->persist($block);
+            $em->flush();
 
-                    foreach ($block->getDependencies() as $item) {
-                        $item->addDependent($block);
-                        $em->persist($item);
-                        $em->flush();
-                    }
+            $this->addFlash('success', 'Block created!');
 
-                    VarDumper::dump($block);
-                    $em->persist($block);
-                    $em->flush();
-                });
+            return $this->redirectToRoute('jluct_configurator_server_admin_edit_block', ['block_id' => $block->getId()]);
+        }
 
-            }
-            
-            $this->addFlash('success', 'post.created_successfully');
+        return $this->render("JluctConfiguratorServerBundle:admin:block.html.twig", [
+            'form' => $form->createView(),
+            'file_id' => $file_id
+        ]);
+    }
+
+    public function EditBlockAction($block_id, Request $request)
+    {
+        $em = $this->get('doctrine.orm.entity_manager');
+//        $em = $this->getDoctrine();
+
+        $block = $em->getRepository('JluctConfiguratorServerBundle:BlockConf')->findOneBy(['id' => $block_id]);
+
+        $form = $this->createForm(BlockConfType::class, $block, [
+            'entity_manager' => $em
+        ]);
+
+        $form->handleRequest($request);
+        VarDumper::dump($form);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $block->getDate();
+
+            $em->persist($block);
+            $em->flush();
 
             VarDumper::dump($block);
+
+            $this->addFlash('success', 'Block updated!');
+
         }
-        
-        return $this->render("JluctConfiguratorServerBundle:admin:block.html.twig", ['form' => $form->createView()]);
+
+        return $this->render("JluctConfiguratorServerBundle:admin:block.html.twig", [
+            'form' => $form->createView(),
+            'file_id' => $block->getFileConfig()->getId()
+        ]);
     }
+    
+    public function AddStringAction()
+    {
+        
+    }
+
 }

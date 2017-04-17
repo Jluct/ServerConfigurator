@@ -19,3 +19,10 @@ jluct_configurator_server_admin_add_block:
     methods:  [GET, POST]
     requirements:
         file_id: '\d+'
+
+jluct_configurator_server_admin_edit_block:
+    path:     /admin/file/block/{block_id}/edit
+    defaults: {_controller: JluctConfiguratorServerBundle:Admin:EditBlock}
+    methods:  [GET, POST]
+    requirements:
+        block_id: '\d+'
