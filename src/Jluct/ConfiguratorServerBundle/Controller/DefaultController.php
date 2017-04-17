@@ -39,6 +39,14 @@ class DefaultController extends Controller
 
     public function addDataAction()
     {
+        // new ClassName() в контроллере не очень круто
+        // Либо чере DI прокинуть нужные вещи, либо вынести в отдельную штуку
+        // какую-то инстанцирование конкретных классов:
+        // $file = Config::BuildConfig(Config::TYPE_FILE); // стремно, но хотя бы так
+        
+        // swypse: круто было бы сделать чейнинг:
+        // $file->methodA()->methodB()->methodC();
+        // Просто в каждом методе `return $this;` сделать
         $file = new FileConf();
         $file->setName('Squid');
         $file->setDate(new \DateTime());
