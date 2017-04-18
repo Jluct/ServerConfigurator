@@ -1,0 +1,211 @@
+{
+  "FileConfig": {
+    "id": {
+      "description": "Первичный ключ",
+      "type": "integer",
+      "nullable": false,
+      "example": "1"
+    },
+    "name": {
+      "description": "Название утилиты",
+      "type": "string",
+      "nullable": false,
+      "example": "Squid"
+    },
+    "version": {
+      "description": "Версия утилиты",
+      "type": "string",
+      "nullable": false,
+      "example": "3.2.1"
+    },
+    "date": {
+      "description": "Дата добавления",
+      "type": "datetime",
+      "nullable": false,
+      "example": "2017.04.16"
+    },
+    "description": {
+      "description": "Описание утилиты и файла настроек",
+      "type": "text",
+      "nullable": false,
+      "example": "Lorem ipsum..."
+    },
+    "separator": {
+      "description": "Разделитель выражений в сроке конфига",
+      "type": "string",
+      "nullable": false,
+      "example": ","
+    },
+    "GroupsConfig": {
+      "GroupConfig": {
+        "id": {
+          "description": "Первичный ключ",
+          "type": "integer",
+          "nullable": false,
+          "example": "1"
+        },
+        "name": {
+          "description": "Название группы параметров",
+          "type": "string",
+          "nullable": false,
+          "example": "AUTHENTICATION"
+        },
+        "required": {
+          "description": "Обязательная группа",
+          "type": "boolean",
+          "nullable": true
+        },
+        "date": {
+          "description": "Дата добавления",
+          "type": "datetime",
+          "nullable": false,
+          "example": "2017.04.16"
+        },
+        "description": {
+          "description": "Описание группы",
+          "type": "text",
+          "nullable": true,
+          "example": "Lorem ipsum..."
+        },
+        "orders": {
+          "description": "Порядок сортировки группы",
+          "type": "integer",
+          "nullable": true,
+          "example": "3"
+        },
+        "activity": {
+          "description": "Активность группы. Если активность false, то строки из данной группы не будут добавленны в конечный файл",
+          "type": "boolean",
+          "nullable": true
+        },
+        "dependencies": {
+          "description": "Зависимости группы. Каждая группа может иметь одну или несколько зависимостей, или не иметь их. Зависмости определяются в отношении многие-ко-многим, по первичным ключам",
+          "type": "GroupConfig relation",
+          "nullable": true
+        },
+        "dependent": {
+          "description": "Зависиме группы. ",
+          "type": "GroupConfig relation",
+          "nullable": true
+        },
+        "StringsConfig": {
+          "StringConfig": {
+            "id": {
+              "description": "Первичный ключ",
+              "type": "integer",
+              "nullable": false,
+              "example": "1"
+            },
+            "name": {
+              "description": "Название строки параметров",
+              "type": "string",
+              "nullable": false,
+              "example": "AUTHENTICATION"
+            },
+            "required": {
+              "description": "Обязательная строка",
+              "type": "boolean",
+              "nullable": true
+            },
+            "date": {
+              "description": "Дата добавления",
+              "type": "datetime",
+              "nullable": false,
+              "example": "2017.04.16"
+            },
+            "description": {
+              "description": "Описание функционала строки",
+              "type": "text",
+              "nullable": true,
+              "example": "Lorem ipsum..."
+            },
+            "orders": {
+              "description": "Порядок сортировки строки, в пределах группы",
+              "type": "integer",
+              "nullable": true,
+              "example": "2"
+            },
+            "activity": {
+              "description": "Активность строки. Если активность false, то строка не будет добавленна в конечный файл",
+              "type": "boolean",
+              "nullable": true
+            },
+            "minLength": {
+              "description": "Минимальное количество выражений в строке",
+              "type": "integer",
+              "nullable": true,
+              "example": "3"
+            },
+            "maxLength": {
+              "description": "Максимальное количество выражений в строке",
+              "type": "integer",
+              "nullable": true,
+              "example": "5"
+            },
+            "byDefault": {
+              "description": "Значение строки по умолчанию, для сброса в 'заводские настройки'",
+              "type": "string",
+              "nullable": true,
+              "example": "basic"
+            },
+            "dependencies": {
+              "description": "Зависимости строки. Каждая строка может иметь одну или несколько зависимостей, или не иметь их. Зависмости определяются в отношении многие-ко-многим, по первичным ключам",
+              "type": "StringConfig relation",
+              "nullable": true
+            },
+            "dependent": {
+              "description": "Зависимые строки",
+              "type": "StringConfig relation",
+              "nullable": true
+            },
+            "?Expressions?": {
+              "expression": {
+                "id": {
+                  "description": "Первичный ключ",
+                  "type": "integer",
+                  "nullable": false,
+                  "example": "1"
+                },
+                "description": {
+                  "description": "Описание функционала выражения",
+                  "type": "text",
+                  "nullable": true,
+                  "example": "Lorem ipsum..."
+                },
+                "activity": {
+                  "description": "Активность выражения. Если активность false, то выражение не будет отабражено при выборе",
+                  "type": "boolean",
+                  "nullable": true
+                },
+                "type": {
+                  "description": "Тип значения выражения. На его основе будет происходить валидация значения от пользователя",
+                  "type": "string || seriable object",
+                  "nullable": false,
+                  "example": "integer"
+                },
+                "value": {
+                  "description": "Значение выражения. Одновременно допускается только заполнение одного из полей: или value или meanings. В случае конфликта приоритет имеет value",
+                  "type": "string || serialized object/array",
+                  "nullable": true,
+                  "example": "basic"
+                },
+                "meanings": {
+                  "description": "Предопределённое значение выражения",
+                  "type": "Meaning relation One-to-Many",
+                  "nullable": true,
+                  "example": "basic"
+                },
+                "orders": {
+                  "description": "Порядок сортировки выражения, в пределах строки",
+                  "type": "integer",
+                  "nullable": true,
+                  "example": "2"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

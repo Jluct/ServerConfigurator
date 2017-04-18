@@ -79,12 +79,25 @@ class BlockConf
     private $dependent;
 
     /**
+     * @var
+     *
+     * @ORM\OneToMany(targetEntity="Jluct\ConfiguratorServerBundle\Entity\StringConf", mappedBy="blockConfig", cascade={"persist"})
+     */
+    private $stringConfig;
+
+    /**
      * @return boolean
      */
     public function isActivity()
     {
         return $this->activity;
     }
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Jluct\ConfiguratorServerBundle\Entity\FileConf", inversedBy="blockConfig")
+     * @ORM\JoinColumn(name="fileConfig_id", referencedColumnName="id")
+     */
+    private $fileConfig;
 
     /**
      * @param boolean $activity
@@ -210,13 +223,6 @@ class BlockConf
     }
 
     /**
-     * @ORM\ManyToOne(targetEntity="Jluct\ConfiguratorServerBundle\Entity\FileConf", inversedBy="blockConfig")
-     * @ORM\JoinColumn(name="fileConfig_id", referencedColumnName="id")
-     */
-    private $fileConfig;
-
-
-    /**
      * Set fileConfig
      *
      * @param \Jluct\ConfiguratorServerBundle\Entity\FileConf $fileConfig
@@ -239,13 +245,6 @@ class BlockConf
     {
         return $this->fileConfig;
     }
-
-    /**
-     * @var
-     *
-     * @ORM\OneToMany(targetEntity="Jluct\ConfiguratorServerBundle\Entity\StringConf", mappedBy="blockConfig", cascade={"persist"})
-     */
-    private $stringConfig;
 
     /**
      * Constructor
