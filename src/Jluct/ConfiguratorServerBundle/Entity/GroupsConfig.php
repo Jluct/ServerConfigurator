@@ -9,10 +9,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * BlockConf
  *
- * @ORM\Table(name="BlockConf")
- * @ORM\Entity(repositoryClass="Jluct\ConfiguratorServerBundle\Repository\BlockConfRepository")
+ * @ORM\Table(name="GroupsConfig")
+ * @ORM\Entity(repositoryClass="Jluct\ConfiguratorServerBundle\Repository\GroupsConfigRepository")
  */
-class BlockConf
+class GroupsConfig
 {
     /**
      * @var int
@@ -63,9 +63,9 @@ class BlockConf
     private $activity;
 
     /**
-     * @var BlockConf
-     * @ORM\ManyToMany(targetEntity="BlockConf", inversedBy="dependent", cascade={"all"})
-     * @ORM\JoinTable(name="block_relation",
+     * @var GroupsConfig
+     * @ORM\ManyToMany(targetEntity="GroupsConfig", inversedBy="dependent", cascade={"all"})
+     * @ORM\JoinTable(name="group_relation",
      *     joinColumns={@ORM\JoinColumn(name="dependent_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="dependency_id", referencedColumnName="id")}
      * )
@@ -73,8 +73,8 @@ class BlockConf
     private $dependencies;
 
     /**
-     * @var BlockConf
-     * @ORM\ManyToMany(targetEntity="BlockConf", mappedBy="dependencies", cascade={"all"})
+     * @var GroupsConfig
+     * @ORM\ManyToMany(targetEntity="GroupsConfig", mappedBy="dependencies", cascade={"all"})
      */
     private $dependent;
 
@@ -94,10 +94,10 @@ class BlockConf
     }
 
     /**
-     * @ORM\ManyToOne(targetEntity="Jluct\ConfiguratorServerBundle\Entity\FileConf", inversedBy="blockConfig")
+     * @ORM\ManyToOne(targetEntity="Jluct\ConfiguratorServerBundle\Entity\Config", inversedBy="groupsConfig")
      * @ORM\JoinColumn(name="fileConfig_id", referencedColumnName="id")
      */
-    private $fileConfig;
+    private $Config;
 
     /**
      * @param boolean $activity
@@ -223,15 +223,15 @@ class BlockConf
     }
 
     /**
-     * Set fileConfig
+     * Set Config
      *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\FileConf $fileConfig
+     * @param \Jluct\ConfiguratorServerBundle\Entity\Config $fileConfig
      *
      * @return BlockConf
      */
-    public function setFileConfig(\Jluct\ConfiguratorServerBundle\Entity\FileConf $fileConfig = null)
+    public function setConfig(\Jluct\ConfiguratorServerBundle\Entity\Config $Config = null)
     {
-        $this->fileConfig = $fileConfig;
+        $this->Config = $Config;
 
         return $this;
     }
@@ -239,11 +239,11 @@ class BlockConf
     /**
      * Get fileConfig
      *
-     * @return \Jluct\ConfiguratorServerBundle\Entity\FileConf
+     * @return \Jluct\ConfiguratorServerBundle\Entity\Config
      */
-    public function getFileConfig()
+    public function getConfig()
     {
-        return $this->fileConfig;
+        return $this->Config;
     }
 
     /**
