@@ -2,6 +2,8 @@
 
 namespace Jluct\ConfiguratorServerBundle\Entity;
 
+use Jluct\ConfiguratorServerBundle\Entity\FileConf;
+use Jluct\ConfiguratorServerBundle\Entity\ParamConf;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -9,10 +11,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * BlockConf
  *
- * @ORM\Table(name="GroupsConfig")
- * @ORM\Entity(repositoryClass="Jluct\ConfiguratorServerBundle\Repository\GroupsConfigRepository")
+ * @ORM\Table(name="GroupConf")
+ * @ORM\Entity(repositoryClass="Jluct\ConfiguratorServerBundle\Repository\GroupConfRepository")
  */
-class GroupsConfig
+class GroupConf
 {
     /**
      * @var int
@@ -63,8 +65,8 @@ class GroupsConfig
     private $activity;
 
     /**
-     * @var GroupsConfig
-     * @ORM\ManyToMany(targetEntity="GroupsConfig", inversedBy="dependent", cascade={"all"})
+     * @var GroupConf $dependencies
+     * @ORM\ManyToMany(targetEntity="GroupConf", inversedBy="dependent", cascade={"all"})
      * @ORM\JoinTable(name="group_relation",
      *     joinColumns={@ORM\JoinColumn(name="dependent_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="dependency_id", referencedColumnName="id")}
@@ -73,17 +75,23 @@ class GroupsConfig
     private $dependencies;
 
     /**
-     * @var GroupsConfig
-     * @ORM\ManyToMany(targetEntity="GroupsConfig", mappedBy="dependencies", cascade={"all"})
+     * @var GroupConf $dependent
+     * @ORM\ManyToMany(targetEntity="GroupConf", mappedBy="dependencies", cascade={"all"})
      */
     private $dependent;
 
     /**
      * @var
      *
-     * @ORM\OneToMany(targetEntity="Jluct\ConfiguratorServerBundle\Entity\StringConf", mappedBy="blockConfig", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="ParamConf", mappedBy="groupConf", cascade={"persist"})
      */
-    private $stringConfig;
+    private $paramConf;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="FileConf", inversedBy="groupsConfig")
+     * @ORM\JoinColumn(name="fileConf_id", referencedColumnName="id")
+     */
+    private $fileConf;
 
     /**
      * @return boolean
@@ -92,12 +100,6 @@ class GroupsConfig
     {
         return $this->activity;
     }
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Jluct\ConfiguratorServerBundle\Entity\Config", inversedBy="groupsConfig")
-     * @ORM\JoinColumn(name="fileConfig_id", referencedColumnName="id")
-     */
-    private $Config;
 
     /**
      * @param boolean $activity
@@ -139,7 +141,6 @@ class GroupsConfig
         $this->description = $description;
     }
 
-
     /**
      * Get id
      *
@@ -155,7 +156,7 @@ class GroupsConfig
      *
      * @param string $name
      *
-     * @return BlockConf
+     * @return GroupConf
      */
     public function setName($name)
     {
@@ -179,7 +180,7 @@ class GroupsConfig
      *
      * @param boolean $required
      *
-     * @return BlockConf
+     * @return GroupConf
      */
     public function setRequired($required)
     {
@@ -203,7 +204,7 @@ class GroupsConfig
      *
      * @param \DateTime $date
      *
-     * @return BlockConf
+     * @return GroupConf
      */
     public function setDate($date)
     {
@@ -225,13 +226,12 @@ class GroupsConfig
     /**
      * Set Config
      *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\Config $fileConfig
-     *
-     * @return BlockConf
+     * @param FileConf $fileConf
+     * @return GroupConf
      */
-    public function setConfig(\Jluct\ConfiguratorServerBundle\Entity\Config $Config = null)
+    public function setConfig(FileConf $fileConf = null)
     {
-        $this->Config = $Config;
+        $this->fileConf = $fileConf;
 
         return $this;
     }
@@ -239,11 +239,11 @@ class GroupsConfig
     /**
      * Get fileConfig
      *
-     * @return \Jluct\ConfiguratorServerBundle\Entity\Config
+     * @return FileConf
      */
-    public function getConfig()
+    public function getFileConf()
     {
-        return $this->Config;
+        return $this->fileConf;
     }
 
     /**
@@ -252,43 +252,42 @@ class GroupsConfig
     public function __construct()
     {
         $this->setDate(new \DateTime());
-        $this->stringConfig = new ArrayCollection();
+        $this->paramConf = new ArrayCollection();
         $this->dependencies = new ArrayCollection();
         $this->dependent = new ArrayCollection();
     }
 
     /**
-     * Add stringConfig
+     * Add paramConfig
      *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $stringConfig
-     *
-     * @return BlockConf
+     * @param ParamConf $paramConf
+     * @return GroupConf
      */
-    public function addStringConfig(\Jluct\ConfiguratorServerBundle\Entity\StringConf $stringConfig)
+    public function addParamConf(ParamConf $paramConf)
     {
-        $this->stringConfig[] = $stringConfig;
+        $this->paramConf[] = $paramConf;
 
         return $this;
     }
 
     /**
-     * Remove stringConfig
+     * Remove paramConfig
      *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $stringConfig
+     * @param ParamConf $paramConf
      */
-    public function removeStringConfig(\Jluct\ConfiguratorServerBundle\Entity\StringConf $stringConfig)
+    public function removeParamConf(ParamConf $paramConf)
     {
-        $this->stringConfig->removeElement($stringConfig);
+        $this->paramConf->removeElement($paramConf);
     }
 
     /**
-     * Get stringConfig
+     * Get paramConfig
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getStringConfig()
+    public function getParamConf()
     {
-        return $this->stringConfig;
+        return $this->paramConf;
     }
 
     /**
@@ -304,11 +303,11 @@ class GroupsConfig
     /**
      * Add dependency
      *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\BlockConf $dependency
+     * @param GroupConf $dependency
      *
-     * @return BlockConf
+     * @return GroupConf
      */
-    public function addDependency(\Jluct\ConfiguratorServerBundle\Entity\BlockConf $dependency)
+    public function addDependency(GroupConf $dependency)
     {
         $this->dependencies[] = $dependency;
 
@@ -318,9 +317,9 @@ class GroupsConfig
     /**
      * Remove dependency
      *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\BlockConf $dependency
+     * @param GroupConf $dependency
      */
-    public function removeDependency(\Jluct\ConfiguratorServerBundle\Entity\BlockConf $dependency)
+    public function removeDependency(GroupConf $dependency)
     {
         $this->dependencies->removeElement($dependency);
     }
@@ -338,11 +337,11 @@ class GroupsConfig
     /**
      * Add dependent
      *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\BlockConf $dependent
+     * @param GroupConf $dependent
      *
-     * @return BlockConf
+     * @return GroupConf
      */
-    public function addDependent(\Jluct\ConfiguratorServerBundle\Entity\BlockConf $dependent)
+    public function addDependent(GroupConf $dependent)
     {
         $this->dependent[] = $dependent;
 
@@ -352,9 +351,9 @@ class GroupsConfig
     /**
      * Remove dependent
      *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\BlockConf $dependent
+     * @param GroupConf $dependent
      */
-    public function removeDependent(\Jluct\ConfiguratorServerBundle\Entity\BlockConf $dependent)
+    public function removeDependent(GroupConf $dependent)
     {
         $this->dependent->removeElement($dependent);
     }
@@ -367,5 +366,19 @@ class GroupsConfig
     public function getDependent()
     {
         return $this->dependent;
+    }
+
+    /**
+     * Set fileConf
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\FileConf $fileConf
+     *
+     * @return GroupConf
+     */
+    public function setFileConf(\Jluct\ConfiguratorServerBundle\Entity\FileConf $fileConf = null)
+    {
+        $this->fileConf = $fileConf;
+
+        return $this;
     }
 }

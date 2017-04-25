@@ -8,10 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * FileConf
  *
- * @ORM\Table(name="`Config`")
- * @ORM\Entity(repositoryClass="Jluct\ConfiguratorServerBundle\Repository\ConfigRepository")
+ * @ORM\Table(name="FileConf")
+ * @ORM\Entity(repositoryClass="Jluct\ConfiguratorServerBundle\Repository\FileConfRepository")
  */
-class Config
+class FileConf
 {
     /**
      * @var int
@@ -51,9 +51,8 @@ class Config
     private $description;
 
     /**
-     * @var
-     *
-     * @ORM\OneToMany(targetEntity="Jluct\ConfiguratorServerBundle\Entity\GroupsConfig", mappedBy="fileConfig", cascade={"persist"})
+     * @var ArrayCollection $groupsConfig
+     * @ORM\OneToMany(targetEntity="GroupConf", mappedBy="fileConf", cascade={"persist"})
      */
     private $groupsConfig;
 
@@ -75,7 +74,6 @@ class Config
 
     /**
      * Get id
-     *
      * @return int
      */
     public function getId()
@@ -87,8 +85,7 @@ class Config
      * Set name
      *
      * @param string $name
-     *
-     * @return Config
+     * @return FileConf
      */
     public function setName($name)
     {
@@ -99,7 +96,6 @@ class Config
 
     /**
      * Get name
-     *
      * @return string
      */
     public function getName()
@@ -111,8 +107,7 @@ class Config
      * Set version
      *
      * @param string $version
-     *
-     * @return Config
+     * @return FileConf
      */
     public function setVersion($version)
     {
@@ -136,7 +131,7 @@ class Config
      *
      * @param \DateTime $date
      *
-     * @return Config
+     * @return FileConf
      */
     public function setDate($date)
     {
@@ -160,18 +155,18 @@ class Config
      */
     public function __construct()
     {
-        $this->GroupsConfig = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->groupsConf = new ArrayCollection();
         $this->setDate(new \DateTime());
     }
 
     /**
      * Add blockConfig
      *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\GroupsConfig $groupsConfig
+     * @param \Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupsConfig
      *
-     * @return Config
+     * @return FileConf
      */
-    public function addBlockConfig(\Jluct\ConfiguratorServerBundle\Entity\GroupsConfig $groupsConfig)
+    public function addBlockConfig(GroupConf $groupsConfig)
     {
         $this->groupsConfig[] = $groupsConfig;
 
@@ -181,9 +176,9 @@ class Config
     /**
      * Remove blockConfig
      *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\GroupsConfig $groupsConfig
+     * @param \Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupsConfig
      */
-    public function removeBlockConfig(\Jluct\ConfiguratorServerBundle\Entity\GroupsConfig $groupsConfig)
+    public function removeBlockConfig(GroupConf $groupsConfig)
     {
         $this->groupsConfig->removeElement($groupsConfig);
     }
@@ -194,6 +189,40 @@ class Config
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getBlockConfig()
+    {
+        return $this->groupsConfig;
+    }
+
+    /**
+     * Add groupsConfig
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupsConfig
+     *
+     * @return FileConf
+     */
+    public function addGroupsConfig(\Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupsConfig)
+    {
+        $this->groupsConfig[] = $groupsConfig;
+
+        return $this;
+    }
+
+    /**
+     * Remove groupsConfig
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupsConfig
+     */
+    public function removeGroupsConfig(\Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupsConfig)
+    {
+        $this->groupsConfig->removeElement($groupsConfig);
+    }
+
+    /**
+     * Get groupsConfig
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGroupsConfig()
     {
         return $this->groupsConfig;
     }

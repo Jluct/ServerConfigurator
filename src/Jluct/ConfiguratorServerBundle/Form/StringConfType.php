@@ -62,7 +62,7 @@ class StringConfType extends AbstractType
                 ]
             ])
             ->add('dependencies', EntityType::class, [
-                'class' => 'Jluct\ConfiguratorServerBundle\Entity\StringConf',
+                'class' => 'ParamConf.php',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('b');
                 },

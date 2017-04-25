@@ -1,211 +1,74 @@
-{
-  "FileConfig": {
-    "id": {
-      "description": "Первичный ключ",
-      "type": "integer",
-      "nullable": false,
-      "example": "1"
-    },
-    "name": {
-      "description": "Название утилиты",
-      "type": "string",
-      "nullable": false,
-      "example": "Squid"
-    },
-    "version": {
-      "description": "Версия утилиты",
-      "type": "string",
-      "nullable": false,
-      "example": "3.2.1"
-    },
-    "date": {
-      "description": "Дата добавления",
-      "type": "datetime",
-      "nullable": false,
-      "example": "2017.04.16"
-    },
-    "description": {
-      "description": "Описание утилиты и файла настроек",
-      "type": "text",
-      "nullable": false,
-      "example": "Lorem ipsum..."
-    },
-    "separator": {
-      "description": "Разделитель выражений в сроке конфига",
-      "type": "string",
-      "nullable": false,
-      "example": ","
-    },
-    "GroupsConfig": {
-      "GroupConfig": {
-        "id": {
-          "description": "Первичный ключ",
-          "type": "integer",
-          "nullable": false,
-          "example": "1"
-        },
-        "name": {
-          "description": "Название группы параметров",
-          "type": "string",
-          "nullable": false,
-          "example": "AUTHENTICATION"
-        },
-        "required": {
-          "description": "Обязательная группа",
-          "type": "boolean",
-          "nullable": true
-        },
-        "date": {
-          "description": "Дата добавления",
-          "type": "datetime",
-          "nullable": false,
-          "example": "2017.04.16"
-        },
-        "description": {
-          "description": "Описание группы",
-          "type": "text",
-          "nullable": true,
-          "example": "Lorem ipsum..."
-        },
-        "orders": {
-          "description": "Порядок сортировки группы",
-          "type": "integer",
-          "nullable": true,
-          "example": "3"
-        },
-        "activity": {
-          "description": "Активность группы. Если активность false, то строки из данной группы не будут добавленны в конечный файл",
-          "type": "boolean",
-          "nullable": true
-        },
-        "dependencies": {
-          "description": "Зависимости группы. Каждая группа может иметь одну или несколько зависимостей, или не иметь их. Зависмости определяются в отношении многие-ко-многим, по первичным ключам",
-          "type": "GroupConfig relation",
-          "nullable": true
-        },
-        "dependent": {
-          "description": "Зависиме группы. ",
-          "type": "GroupConfig relation",
-          "nullable": true
-        },
-        "StringsConfig": {
-          "StringConfig": {
-            "id": {
-              "description": "Первичный ключ",
-              "type": "integer",
-              "nullable": false,
-              "example": "1"
-            },
-            "name": {
-              "description": "Название строки параметров",
-              "type": "string",
-              "nullable": false,
-              "example": "AUTHENTICATION"
-            },
-            "required": {
-              "description": "Обязательная строка",
-              "type": "boolean",
-              "nullable": true
-            },
-            "date": {
-              "description": "Дата добавления",
-              "type": "datetime",
-              "nullable": false,
-              "example": "2017.04.16"
-            },
-            "description": {
-              "description": "Описание функционала строки",
-              "type": "text",
-              "nullable": true,
-              "example": "Lorem ipsum..."
-            },
-            "orders": {
-              "description": "Порядок сортировки строки, в пределах группы",
-              "type": "integer",
-              "nullable": true,
-              "example": "2"
-            },
-            "activity": {
-              "description": "Активность строки. Если активность false, то строка не будет добавленна в конечный файл",
-              "type": "boolean",
-              "nullable": true
-            },
-            "minLength": {
-              "description": "Минимальное количество выражений в строке",
-              "type": "integer",
-              "nullable": true,
-              "example": "3"
-            },
-            "maxLength": {
-              "description": "Максимальное количество выражений в строке",
-              "type": "integer",
-              "nullable": true,
-              "example": "5"
-            },
-            "byDefault": {
-              "description": "Значение строки по умолчанию, для сброса в 'заводские настройки'",
-              "type": "string",
-              "nullable": true,
-              "example": "basic"
-            },
-            "dependencies": {
-              "description": "Зависимости строки. Каждая строка может иметь одну или несколько зависимостей, или не иметь их. Зависмости определяются в отношении многие-ко-многим, по первичным ключам",
-              "type": "StringConfig relation",
-              "nullable": true
-            },
-            "dependent": {
-              "description": "Зависимые строки",
-              "type": "StringConfig relation",
-              "nullable": true
-            },
-            "?Expressions?": {
-              "expression": {
-                "id": {
-                  "description": "Первичный ключ",
-                  "type": "integer",
-                  "nullable": false,
-                  "example": "1"
-                },
-                "description": {
-                  "description": "Описание функционала выражения",
-                  "type": "text",
-                  "nullable": true,
-                  "example": "Lorem ipsum..."
-                },
-                "activity": {
-                  "description": "Активность выражения. Если активность false, то выражение не будет отабражено при выборе",
-                  "type": "boolean",
-                  "nullable": true
-                },
-                "type": {
-                  "description": "Тип значения выражения. На его основе будет происходить валидация значения от пользователя",
-                  "type": "string || seriable object",
-                  "nullable": false,
-                  "example": "integer"
-                },
-                "value": {
-                  "description": "Значение выражения. Одновременно допускается только заполнение одного из полей: или value или meanings. В случае конфликта приоритет имеет value",
-                  "type": "string || serialized object/array",
-                  "nullable": true,
-                  "example": "basic"
-                },
-                "meanings": {
-                  "description": "Предопределённое значение выражения",
-                  "type": "Meaning relation One-to-Many",
-                  "nullable": true,
-                  "example": "basic"
-                },
-                "orders": {
-                  "description": "Порядок сортировки выражения, в пределах строки",
-                  "type": "integer",
-                  "nullable": true,
-                  "example": "2"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+config: {}
+
+Group: {
+name, id, parent, ... // тут надо обсуждать, что еще необходимо
+}
+
+Param: {
+name, id, value,
+patern_id // type который был взят как шаблон для генерации параметра команды
+}
+-a   /etc/exim4    #ERROR
+[const, pach]
+
+Patern{
+id,
+name,
+prop_id,
+/**
+  * А может просто устанавилвать связь многие-ко-многим?
+  * Один хрен при получении из БД мы получим массив
+  * А вот теперь то, про что мы забыли. Subtype, в композиции может быть не обязательным
+  */
+composition[s_id, subtype_id_2] //сериализованый массив
+rules: [{subtype_id_1}, NOT, '-c', OR, '-d']
+
+}
+
+Primitive {
+id,
+name,
+rules //надо подумать над названием по проще))
+}
+
+Type {
+id : s_id,
+requiere: boolean
+pattern:[const, const]
+rules:[]
+}
+
+
+Пусть 2 варианта команды: conf_foo
+conf_foo basic -l
+conf_foo advancer 172.0.0.1 -a -l /etc/lib/foo
+
+Prop conf_foo{
+id:p_id,
+name:"conf_foo",
+value: "-l" //допустим активировали логирование
+type_id: patern_id_1
+}
+
+Patern basic{
+id:patern_id_1
+name:"basic"
+prop_id:p_id
+composition: [subtype_id_1]
+}
+
+Type operator{
+id:type_id_1
+name:"operator"
+validation_rules:"/^(\-){1}+[a-zA-Z]{1}/" //'-l'
+}
+
+Subtype {
+id:subtype_id_1
+parent:type_id_1
+require: false //нет места для логов и я не хочу его включать
+// Или [{subtype_id_1}, IS, '-l'] И любое значение. кроме -l будет ложное.
+// Можно в таком случае добавить список предопределённых значений
+//[{subtype_id_1},NOT,'value', OR,[X, IS, "value", AND, {subtype_id_2}, IS, "value2"]] Как ты показывал
+//Штука будет мощная))) Можно припаять процедуру прям в MySQL
 }

@@ -6,12 +6,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * StringConf
+ * ParamConf
  *
- * @ORM\Table(name="StringConf")
- * @ORM\Entity(repositoryClass="Jluct\ConfiguratorServerBundle\Repository\StringConfRepository")
+ * @ORM\Table(name="ParamConf")
+ * @ORM\Entity(repositoryClass="Jluct\ConfiguratorServerBundle\Repository\ParamConfRepository")
  */
-class StringConf
+class ParamConf
 {
     /**
      * @var int
@@ -37,11 +37,18 @@ class StringConf
     private $required;
 
     /**
-     * @var string
+     * @var Pattern $pattern
      *
-     * @ORM\Column(name="type", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="Jluct\ConfiguratorServerBundle\Entity\Pattern", mappedBy="paramConf")
      */
-    private $type;
+    private $patterns;
+
+    /**
+     * @var Pattern $usePattern
+     * @ORM\ManyToOne(targetEntity="Jluct\ConfiguratorServerBundle\Entity\Pattern")
+     * @ORM\JoinColumn(name="pattern_id", referencedColumnName="id")
+     */
+    private $usePattern;
 
     /**
      * @var string
@@ -74,19 +81,25 @@ class StringConf
     /**
      * @var string
      *
-     * @ORM\Column(name="value", type="string", length=255, nullable=true)
+     * @ORM\Column(name="value", type="text", nullable=true)
      */
     private $value;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Jluct\ConfiguratorServerBundle\Entity\BlockConf", inversedBy="stringConfig")
-     * @ORM\JoinColumn(name="blockConfig_id", referencedColumnName="id")
+     * @var boolean
+     * @ORM\Column(name="isRepeated", type="boolean", nullable=true)
      */
-    private $blockConfig;
+    private $isRepeated;
 
     /**
-     * @var BlockConf
-     * @ORM\ManyToMany(targetEntity="StringConf", inversedBy="dependent", cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="Jluct\ConfiguratorServerBundle\Entity\GroupConf", inversedBy="paramConf")
+     * @ORM\JoinColumn(name="groupConf_id", referencedColumnName="id")
+     */
+    private $groupConf;
+
+    /**
+     * @var ParamConf
+     * @ORM\ManyToMany(targetEntity="ParamConf", inversedBy="dependent", cascade={"all"})
      * @ORM\JoinTable(name="string_relation",
      *     joinColumns={@ORM\JoinColumn(name="dependent_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="dependency_id", referencedColumnName="id")}
@@ -95,8 +108,8 @@ class StringConf
     private $dependencies;
 
     /**
-     * @var BlockConf
-     * @ORM\ManyToMany(targetEntity="StringConf", mappedBy="dependencies", cascade={"all"})
+     * @var ParamConf
+     * @ORM\ManyToMany(targetEntity="ParamConf", mappedBy="dependencies", cascade={"all"})
      */
     private $dependent;
 
@@ -124,7 +137,7 @@ class StringConf
     }
 
     /**
-     * @return BlockConf
+     * @return ParamConf
      */
     public function getDependencies()
     {
@@ -132,7 +145,7 @@ class StringConf
     }
 
     /**
-     * @param BlockConf $dependencies
+     * @param ParamConf $dependencies
      */
     public function setDependencies($dependencies)
     {
@@ -140,7 +153,7 @@ class StringConf
     }
 
     /**
-     * @return BlockConf
+     * @return ParamConf
      */
     public function getDependent()
     {
@@ -148,13 +161,12 @@ class StringConf
     }
 
     /**
-     * @param BlockConf $dependent
+     * @param ParamConf $dependent
      */
     public function setDependent($dependent)
     {
         $this->dependent[] = $dependent;
     }
-
 
     /**
      * @return string
@@ -219,7 +231,7 @@ class StringConf
      *
      * @param string $name
      *
-     * @return StringConf
+     * @return ParamConf
      */
     public function setName($name)
     {
@@ -243,7 +255,7 @@ class StringConf
      *
      * @param boolean $required
      *
-     * @return StringConf
+     * @return ParamConf
      */
     public function setRequired($required)
     {
@@ -263,35 +275,11 @@ class StringConf
     }
 
     /**
-     * Set type
-     *
-     * @param string $type
-     *
-     * @return StringConf
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
      * Set byDefault
      *
      * @param string $byDefault
      *
-     * @return StringConf
+     * @return ParamConf
      */
     public function setByDefault($byDefault)
     {
@@ -315,7 +303,7 @@ class StringConf
      *
      * @param integer $orders
      *
-     * @return StringConf
+     * @return ParamConf
      */
     public function setOrders($orders)
     {
@@ -337,13 +325,13 @@ class StringConf
     /**
      * Set blockConfig
      *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\BlockConf $blockConfig
+     * @param GroupConf $groupConfig
      *
-     * @return StringConf
+     * @return ParamConf
      */
-    public function setBlockConfig(\Jluct\ConfiguratorServerBundle\Entity\BlockConf $blockConfig = null)
+    public function setGroupConfig(GroupConf $groupConfig = null)
     {
-        $this->blockConfig = $blockConfig;
+        $this->groupConf = $groupConfig;
 
         return $this;
     }
@@ -351,62 +339,27 @@ class StringConf
     /**
      * Get blockConfig
      *
-     * @return \Jluct\ConfiguratorServerBundle\Entity\BlockConf
+     * @return GroupConf
      */
-    public function getBlockConfig()
+    public function getGroupConfig()
     {
-        return $this->blockConfig;
+        return $this->groupConf;
     }
 
     /**
-     * @var Meanings
-     *
-     * @ORM\OneToMany(targetEntity="Jluct\ConfiguratorServerBundle\Entity\Meanings", mappedBy="stringConfig", cascade={"persist"})
-     *
+     * @return boolean
      */
-    private $meanings;
-
-
-    public function __construct()
+    public function isRepeated()
     {
-        $this->meanings = new ArrayCollection();
-        $this->dependencies = new ArrayCollection();
-        $this->dependent = new ArrayCollection();
-        $this->date = new \DateTime();
+        return $this->isRepeated;
     }
 
     /**
-     * Add meaning
-     *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\Meanings $meaning
-     *
-     * @return StringConf
+     * @param boolean $isRepeated
      */
-    public function addMeaning(\Jluct\ConfiguratorServerBundle\Entity\Meanings $meaning)
+    public function setIsRepeated($isRepeated)
     {
-        $this->meanings[] = $meaning;
-
-        return $this;
-    }
-
-    /**
-     * Remove meaning
-     *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\Meanings $meaning
-     */
-    public function removeMeaning(\Jluct\ConfiguratorServerBundle\Entity\Meanings $meaning)
-    {
-        $this->meanings->removeElement($meaning);
-    }
-
-    /**
-     * Get meanings
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMeanings()
-    {
-        return $this->meanings;
+        $this->isRepeated = $isRepeated;
     }
 
     /**
@@ -422,11 +375,11 @@ class StringConf
     /**
      * Add dependency
      *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $dependency
+     * @param ParamConf $dependency
      *
-     * @return StringConf
+     * @return ParamConf
      */
-    public function addDependency(\Jluct\ConfiguratorServerBundle\Entity\StringConf $dependency)
+    public function addDependency(ParamConf $dependency)
     {
         $this->dependencies[] = $dependency;
 
@@ -436,9 +389,9 @@ class StringConf
     /**
      * Remove dependency
      *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $dependency
+     * @param ParamConf $dependency
      */
-    public function removeDependency(\Jluct\ConfiguratorServerBundle\Entity\StringConf $dependency)
+    public function removeDependency(ParamConf $dependency)
     {
         $this->dependencies->removeElement($dependency);
     }
@@ -446,11 +399,11 @@ class StringConf
     /**
      * Add dependent
      *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $dependent
+     * @param ParamConf $dependent
      *
-     * @return StringConf
+     * @return ParamConf
      */
-    public function addDependent(\Jluct\ConfiguratorServerBundle\Entity\StringConf $dependent)
+    public function addDependent(ParamConf $dependent)
     {
         $this->dependent[] = $dependent;
 
@@ -460,10 +413,112 @@ class StringConf
     /**
      * Remove dependent
      *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\StringConf $dependent
+     * @param ParamConf $dependent
      */
-    public function removeDependent(\Jluct\ConfiguratorServerBundle\Entity\StringConf $dependent)
+    public function removeDependent(ParamConf $dependent)
     {
         $this->dependent->removeElement($dependent);
+    }
+
+    public function __construct()
+    {
+        $this->dependencies = new ArrayCollection();
+        $this->dependent = new ArrayCollection();
+        $this->patterns = new ArrayCollection();
+        $this->date = new \DateTime();
+    }
+
+
+
+    /**
+     * Get isRepeated
+     *
+     * @return boolean
+     */
+    public function getIsRepeated()
+    {
+        return $this->isRepeated;
+    }
+
+    /**
+     * Add pattern
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\Pattern $pattern
+     *
+     * @return ParamConf
+     */
+    public function addPattern(\Jluct\ConfiguratorServerBundle\Entity\Pattern $pattern)
+    {
+        $this->patterns[] = $pattern;
+
+        return $this;
+    }
+
+    /**
+     * Remove pattern
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\Pattern $pattern
+     */
+    public function removePattern(\Jluct\ConfiguratorServerBundle\Entity\Pattern $pattern)
+    {
+        $this->patterns->removeElement($pattern);
+    }
+
+    /**
+     * Get patterns
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPatterns()
+    {
+        return $this->patterns;
+    }
+
+    /**
+     * Set usePattern
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\Pattern $usePattern
+     *
+     * @return ParamConf
+     */
+    public function setUsePattern(\Jluct\ConfiguratorServerBundle\Entity\Pattern $usePattern = null)
+    {
+        $this->usePattern = $usePattern;
+
+        return $this;
+    }
+
+    /**
+     * Get usePattern
+     *
+     * @return \Jluct\ConfiguratorServerBundle\Entity\Pattern
+     */
+    public function getUsePattern()
+    {
+        return $this->usePattern;
+    }
+
+    /**
+     * Set groupConf
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupConf
+     *
+     * @return ParamConf
+     */
+    public function setGroupConf(\Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupConf = null)
+    {
+        $this->groupConf = $groupConf;
+
+        return $this;
+    }
+
+    /**
+     * Get groupConf
+     *
+     * @return \Jluct\ConfiguratorServerBundle\Entity\GroupConf
+     */
+    public function getGroupConf()
+    {
+        return $this->groupConf;
     }
 }
