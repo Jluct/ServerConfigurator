@@ -94,4 +94,3 @@ class Primitive
         return $this->rules;
     }
 }
-

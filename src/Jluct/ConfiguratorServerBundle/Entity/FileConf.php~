@@ -192,4 +192,38 @@ class FileConf
     {
         return $this->groupsConfig;
     }
+
+    /**
+     * Add groupsConfig
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupsConfig
+     *
+     * @return FileConf
+     */
+    public function addGroupsConfig(\Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupsConfig)
+    {
+        $this->groupsConfig[] = $groupsConfig;
+
+        return $this;
+    }
+
+    /**
+     * Remove groupsConfig
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupsConfig
+     */
+    public function removeGroupsConfig(\Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupsConfig)
+    {
+        $this->groupsConfig->removeElement($groupsConfig);
+    }
+
+    /**
+     * Get groupsConfig
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGroupsConfig()
+    {
+        return $this->groupsConfig;
+    }
 }

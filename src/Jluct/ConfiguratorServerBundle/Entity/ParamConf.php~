@@ -429,4 +429,96 @@ class ParamConf
     }
 
 
+
+    /**
+     * Get isRepeated
+     *
+     * @return boolean
+     */
+    public function getIsRepeated()
+    {
+        return $this->isRepeated;
+    }
+
+    /**
+     * Add pattern
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\Pattern $pattern
+     *
+     * @return ParamConf
+     */
+    public function addPattern(\Jluct\ConfiguratorServerBundle\Entity\Pattern $pattern)
+    {
+        $this->patterns[] = $pattern;
+
+        return $this;
+    }
+
+    /**
+     * Remove pattern
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\Pattern $pattern
+     */
+    public function removePattern(\Jluct\ConfiguratorServerBundle\Entity\Pattern $pattern)
+    {
+        $this->patterns->removeElement($pattern);
+    }
+
+    /**
+     * Get patterns
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPatterns()
+    {
+        return $this->patterns;
+    }
+
+    /**
+     * Set usePattern
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\Pattern $usePattern
+     *
+     * @return ParamConf
+     */
+    public function setUsePattern(\Jluct\ConfiguratorServerBundle\Entity\Pattern $usePattern = null)
+    {
+        $this->usePattern = $usePattern;
+
+        return $this;
+    }
+
+    /**
+     * Get usePattern
+     *
+     * @return \Jluct\ConfiguratorServerBundle\Entity\Pattern
+     */
+    public function getUsePattern()
+    {
+        return $this->usePattern;
+    }
+
+    /**
+     * Set groupConf
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupConf
+     *
+     * @return ParamConf
+     */
+    public function setGroupConf(\Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupConf = null)
+    {
+        $this->groupConf = $groupConf;
+
+        return $this;
+    }
+
+    /**
+     * Get groupConf
+     *
+     * @return \Jluct\ConfiguratorServerBundle\Entity\GroupConf
+     */
+    public function getGroupConf()
+    {
+        return $this->groupConf;
+    }
 }

@@ -12,86 +12,116 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Type
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="id", type="integer")
+	 * @ORM\Id
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	private $id;
+
+	/**
+	 * @var bool
+	 *
+	 * @ORM\Column(name="required", type="boolean")
+	 */
+	private $required;
+
+	/**
+	 * @var array
+	 *
+	 * @ORM\Column(name="rules", type="array")
+	 */
+	private $rules;
+
+	/**
+	 * @var Pattern $patterns
+	 *
+	 * @ORM\Column(name="pattern", type="array")
+	 */
+	private $pattern;
+
+	/**
+	 * Get id
+	 *
+	 * @return int
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
+
+	/**
+	 * Set required
+	 *
+	 * @param boolean $required
+	 *
+	 * @return Type
+	 */
+	public function setRequired($required)
+	{
+		$this->required = $required;
+
+		return $this;
+	}
+
+	/**
+	 * Get required
+	 *
+	 * @return bool
+	 */
+	public function getRequired()
+	{
+		return $this->required;
+	}
+
+	/**
+	 * Set rules
+	 *
+	 * @param array $rules
+	 *
+	 * @return Type
+	 */
+	public function setRules($rules)
+	{
+		$this->rules = $rules;
+
+		return $this;
+	}
+
+	/**
+	 * Get rules
+	 *
+	 * @return array
+	 */
+	public function getRules()
+	{
+		return $this->rules;
+	}
+
 
     /**
-     * @var bool
+     * Set pattern
      *
-     * @ORM\Column(name="required", type="boolean")
-     */
-    private $required;
-
-    /**
-     * @var array
-     *
-     * @ORM\Column(name="rules", type="array")
-     */
-    private $rules;
-
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set required
-     *
-     * @param boolean $required
+     * @param array $pattern
      *
      * @return Type
      */
-    public function setRequired($required)
+    public function setPattern($pattern)
     {
-        $this->required = $required;
+        $this->pattern = $pattern;
 
         return $this;
     }
 
     /**
-     * Get required
-     *
-     * @return bool
-     */
-    public function getRequired()
-    {
-        return $this->required;
-    }
-
-    /**
-     * Set rules
-     *
-     * @param array $rules
-     *
-     * @return Type
-     */
-    public function setRules($rules)
-    {
-        $this->rules = $rules;
-
-        return $this;
-    }
-
-    /**
-     * Get rules
+     * Get pattern
      *
      * @return array
      */
-    public function getRules()
+    public function getPattern()
     {
-        return $this->rules;
+        return $this->pattern;
     }
-    
 }

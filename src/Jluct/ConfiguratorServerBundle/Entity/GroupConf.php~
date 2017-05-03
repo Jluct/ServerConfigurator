@@ -367,4 +367,18 @@ class GroupConf
     {
         return $this->dependent;
     }
+
+    /**
+     * Set fileConf
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\FileConf $fileConf
+     *
+     * @return GroupConf
+     */
+    public function setFileConf(\Jluct\ConfiguratorServerBundle\Entity\FileConf $fileConf = null)
+    {
+        $this->fileConf = $fileConf;
+
+        return $this;
+    }
 }

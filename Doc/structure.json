@@ -1,0 +1,65 @@
+config: {}
+
+Group: {
+name, id, parent, ... // тут надо обсуждать, что еще необходимо
+}
+
+Param: {
+name, id, value,
+patern_id // type который был взят как шаблон для генерации параметра команды
+}
+-a   /etc/exim4    #ERROR
+[const, pach]
+
+Patern{
+  id,
+  name,
+  prop_id,
+  composition: [s_id, subtype_id_2]
+  rules: [{subtype_id_1}, NOT, '-c', OR, '-d']
+}
+
+Primitive {
+  id,
+  name,
+  rules
+}
+
+Type {
+  id,
+  primitive:p_id
+  requiere: boolean
+  pattern:[const, const]
+  rules:[]
+}
+
+
+Пусть 2 варианта команды: conf_foo
+conf_foo basic -l
+conf_foo advancer 172.0.0.1 -a -l /etc/lib/foo
+
+Prop conf_foo{
+id:p_id,
+name:"conf_foo",
+value: "-l" //допустим активировали логирование
+type_id: patern_id_1
+}
+
+Patern basic{
+id:patern_id_1
+name:"basic"
+prop_id:p_id
+composition: [subtype_id_1]
+}
+
+Type operator{
+id:type_id_1
+name:"operator"
+validation_rules:"/^(\-){1}+[a-zA-Z]{1}/" //'-l'
+}
+
+Subtype {
+id:subtype_id_1
+parent:type_id_1
+require: false
+}
