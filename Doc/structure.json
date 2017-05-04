@@ -15,7 +15,8 @@ ParamFile{
 
 //значение параметра
 ParamConf: {
-      id, value,
+      id, value
+      pf_id
       pattern_id // паттерн, который использует конкретный экзепляр параметра
 }
 
