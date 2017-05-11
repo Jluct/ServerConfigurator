@@ -106,6 +106,14 @@ $conf = new Param();
 $conf->paramConf = $conf_foo;
 $conf->usePattern = $pattern1;
 
+echo "<pre>";
+print_r($conf);
+echo "</pre>";
+
+echo "<pre>";
+	echo json_encode($conf);
+echo "</pre>";
+
 
 /**
  * Логика
