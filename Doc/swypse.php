@@ -1,6 +1,49 @@
 // conf_foo basic -l
 // conf_foo advanced 172.0.0.1 -a -l /etc/lib/foo
-
+<?
+	// типа без групп пока
+	class Config { public $params; }
+	
+	class Type { 
+		public $struct; 
+		public function __construct($struct) {
+			$this->struct = $struct;
+		}
+	}
+	
+	class Const extends Type {
+		public function __construct($value) {
+			$this->value = $value;
+		}
+	}
+	
+	class IP extends Type { }
+	
+	class Path extends Type { }
+	
+	$ConfFooBasic = new Type([
+		new Const('basic'),
+		new Const('-l'),
+	]);
+	
+	$ConfFooAdvanced = new Type([
+		new Const('advanced'),
+		new IP(),
+		new Const('-a'),
+		new Const('-l'),
+		new Path()
+	]);
+	
+	$ConfFoo = new Type([
+		$ConfFooBasic,
+		'OR', // для примера
+		$ConfFooAdvanced
+	]);
+	
+	$config = new Config();
+	$config->params = [$ConfFoo];
+?>
+<script>
 ConfFoo = {
 	struct: [
 		{type: 'Const', value: 'conf_foo'},
@@ -85,3 +128,4 @@ Config = {
 // Возможно, проще работать будет с примитивами или флагом типа:
 // { type: 'Const', isPrimitive: true }
 // хз, тут во время работы будет ясно
+</script>
