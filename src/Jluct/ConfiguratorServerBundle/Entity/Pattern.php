@@ -52,4 +52,110 @@ class Pattern
 	private $composition;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Pattern
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set rules
+     *
+     * @param array $rules
+     *
+     * @return Pattern
+     */
+    public function setRules($rules)
+    {
+        $this->rules = $rules;
+
+        return $this;
+    }
+
+    /**
+     * Get rules
+     *
+     * @return array
+     */
+    public function getRules()
+    {
+        return $this->rules;
+    }
+
+    /**
+     * Set composition
+     *
+     * @param array $composition
+     *
+     * @return Pattern
+     */
+    public function setComposition($composition)
+    {
+        $this->composition = $composition;
+
+        return $this;
+    }
+
+    /**
+     * Get composition
+     *
+     * @return array
+     */
+    public function getComposition()
+    {
+        return $this->composition;
+    }
+
+    /**
+     * Set param
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\ParamConf $param
+     *
+     * @return Pattern
+     */
+    public function setParam(\Jluct\ConfiguratorServerBundle\Entity\ParamConf $param = null)
+    {
+        $this->param = $param;
+
+        return $this;
+    }
+
+    /**
+     * Get param
+     *
+     * @return \Jluct\ConfiguratorServerBundle\Entity\ParamConf
+     */
+    public function getParam()
+    {
+        return $this->param;
+    }
 }

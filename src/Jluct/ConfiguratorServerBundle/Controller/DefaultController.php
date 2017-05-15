@@ -4,8 +4,14 @@ namespace Jluct\ConfiguratorServerBundle\Controller;
 
 use Jluct\ConfiguratorServerBundle\Entity\BlockConf;
 use Jluct\ConfiguratorServerBundle\Entity\FileConf;
+use Jluct\ConfiguratorServerBundle\Entity\GroupConf;
 use Jluct\ConfiguratorServerBundle\Entity\Meanings;
+use Jluct\ConfiguratorServerBundle\Entity\Param;
+use Jluct\ConfiguratorServerBundle\Entity\ParamConf;
+use Jluct\ConfiguratorServerBundle\Entity\Pattern;
+use Jluct\ConfiguratorServerBundle\Entity\Primitive;
 use Jluct\ConfiguratorServerBundle\Entity\StringConf;
+use Jluct\ConfiguratorServerBundle\Entity\Type;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,191 +19,176 @@ use Symfony\Component\VarDumper\VarDumper;
 
 class DefaultController extends Controller
 {
-    public function indexAction()
-    {
-        return $this->render('JluctConfiguratorServerBundle:Default:index.html.twig');
-    }
+	public function indexAction()
+	{
+		return $this->render('JluctConfiguratorServerBundle:Default:index.html.twig');
+	}
 
-    public function templateListAction()
-    {
-        return $this->render('JluctConfiguratorServerBundle:Default:template-list.html.twig');
-    }
+	public function templateListAction()
+	{
+		return $this->render('JluctConfiguratorServerBundle:Default:template-list.html.twig');
+	}
 
-    public function getSettingFileAction($id)
-    {
-        $em = $this->getDoctrine()->getRepository('JluctConfiguratorServerBundle:FileConf');
+	public function getSettingFileAction($id)
+	{
+		$em = $this->getDoctrine()->getRepository('JluctConfiguratorServerBundle:FileConf');
 
-        $data = $em->getFileAllData($id);
+		$data = $em->getFileAllData($id);
 
-        VarDumper::dump($data[0]);
+		VarDumper::dump($data[0]);
 
-        return $this->render('JluctConfiguratorServerBundle:Default:file-config.html.twig', [
-                'data' => $data[0]
-            ]
-        );
-    }
+		return $this->render('JluctConfiguratorServerBundle:Default:file-config.html.twig', [
+				'data' => $data[0]
+			]
+		);
+	}
 
-    public function addDataAction()
-    {
-        // new ClassName() в контроллере не очень круто
-        // Либо чере DI прокинуть нужные вещи, либо вынести в отдельную штуку
-        // какую-то инстанцирование конкретных классов:
-        // $file = Config::BuildConfig(Config::TYPE_FILE); // стремно, но хотя бы так
-        
-        // swypse: круто было бы сделать чейнинг:
-        // $file->methodA()->methodB()->methodC();
-        // Просто в каждом методе `return $this;` сделать
-        $file = new FileConf();
-        $file->setName('Squid');
-        $file->setDate(new \DateTime());
-        $file->setVersion('3.1.9');
-        $file->setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer id quam vel mi commodo varius. Sed dapibus quam magna, cursus ultrices lacus elementum non. Proin ac egestas libero. Integer posuere enim ac nibh lacinia mollis. Ut congue porta condimentum. In aliquet maximus ante, non aliquet mauris aliquet eu. Integer bibendum, libero eget varius tincidunt, nisi nibh molestie diam, a vulputate sem mauris et ipsum. Maecenas ornare tempor elit, maximus varius erat iaculis in.");
+	public function addDataAction()
+	{
 
-        $block1 = new BlockConf();
-        $block1->setName('AUTHENTICATION');
-        $block1->setRequired(true);
-        $block1->setDate(new \DateTime());
-        $block1->setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer id quam vel mi commodo varius. Sed dapibus quam magna, cursus ultrices lacus elementum non. Proin ac egestas libero. Integer posuere enim ac nibh lacinia mollis. Ut congue porta condimentum. In aliquet maximus ante, non aliquet mauris aliquet eu. Integer bibendum, libero eget varius tincidunt, nisi nibh molestie diam, a vulputate sem mauris et ipsum. Maecenas ornare tempor elit, maximus varius erat iaculis in.");
-        $block1->setOrders(1);
-        $block1->setActivity(true);
+		/**
+		 * For example:
+		 * Конфигурация программы FOO
+		 *
+		 * Блок foo_auth
+		 *
+		 * basic - тип авторизации (basic, advance)
+		 * -l - вести лог. Не обязательный параметр.
+		 * /var/foo/log.txt - путь к файлу логов. Не обязательный параметр.
+		 * Указывается только если указать флаг "-l" (далее зависим).
+		 * Возможно не указывать путь и в этом случае он берётся из дефолтных настроект программы
+		 *
+		 * Дополнительные параметры
+		 *
+		 * 127.0.0.1 - адрес. Не обязательный параметр. Указывается только при типе advance
+		 * -a - запретить не авторизацию вне указанного адреса. Не обязательный
+		 *
+		 * param_name         type auth   logging     path to log file
+		 * ---------------------------------------------------------
+		 *  conf_auth_type      basic       -l        /path/to/logs.txt    || conf_foo advance 127.0.0.1 -a -l
+		 *
+		 *
+		 * type - тип хранения сессии (file, db, RAM)
+		 * {file_path} - Путь к файлу с сессией. Не обязательный параметр.
+		 * Зависим от типа хранения сессии
+		 * db_type - название БД (mysql, mssql, sqlite)
+		 * (1,2)
+		 *      host - адрес расположения БД
+		 *      {port} - номер порта. Необязательный параметр для mysql, но обязательный для mssql (ну просто для примера)
+		 *      login - логин
+		 *      password - пароль
+		 *      db_name - имя БД
+		 * (3)
+		 *      /path/to/db - путь к базе данных.
+		 *
+		 * Дополнительные параметры
+		 *
+		 * 127.0.0.1 - адрес. Не обязательный параметр
+		 *
+		 * conf_auth_session type [{file_path}] [ db_type [host [{port}] login password db_name] [/path/to/db] ]
+		 *
+		 * conf_auth_session type [{file_path}]                            [db_type     host       login    password   [db_name]]
+		 * --------------------------------------------------------------------------------------------------------------------
+		 * conf_auth_session file /path/to/file || conf_auth_session db      mysql    127.0.0.1     root    Hn8dfmF8   foo_db || conf_auth_session ram
+		 *
+		 * Блок foo_proxy
+		 * conf_baz 172.16.82.7 3200s
+		 * **работаю над этим** *
+		 */
 
+		//PRIMITIVE
 
-        $block2 = new BlockConf();
-        $block2->setName('ACCESS');
-        $block2->setRequired(true);
-        $block2->setDate(new \DateTime());
-        $block2->setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer id quam vel mi commodo varius. Sed dapibus quam magna, cursus ultrices lacus elementum non. Proin ac egestas libero. Integer posuere enim ac nibh lacinia mollis. Ut congue porta condimentum. In aliquet maximus ante, non aliquet mauris aliquet eu. Integer bibendum, libero eget varius tincidunt, nisi nibh molestie diam, a vulputate sem mauris et ipsum. Maecenas ornare tempor elit, maximus varius erat iaculis in.");
-        $block2->setOrders(2);
-        $block2->setActivity(true);
-        $block2->setDependencies($block1);
+		$primitive1 = new Primitive();
+		$primitive1->setName('string');
+		$primitive1->setRules('a-zA-Z');
 
+		$primitive2 = new Primitive();
+		$primitive2->setName('property');
+		$primitive2->setRules('^(\-){1}+[a-zA-Z]{1}');
 
-        $block3 = new BlockConf();
-        $block3->setName('NETWORK');
-        $block3->setRequired(true);
-        $block3->setDate(new \DateTime());
-        $block3->setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer id quam vel mi commodo varius. Sed dapibus quam magna, cursus ultrices lacus elementum non. Proin ac egestas libero. Integer posuere enim ac nibh lacinia mollis. Ut congue porta condimentum. In aliquet maximus ante, non aliquet mauris aliquet eu. Integer bibendum, libero eget varius tincidunt, nisi nibh molestie diam, a vulputate sem mauris et ipsum. Maecenas ornare tempor elit, maximus varius erat iaculis in.");
-        $block3->setOrders(3);
-        $block3->setActivity(true);
-        $block3->setDependencies($block1);
-        $block3->setDependencies($block2);
+		$primitive3 = new Primitive();
+		$primitive3->setName('path');
+		$primitive3->setRules('a-zA-Z+\\/');
 
+		$primitive4 = new Primitive();
+		$primitive4->setName('ip');
+		$primitive4->setRules('[0-9]+\.{3}');
 
-        $meanings1 = new Meanings();
-        $meanings1->setName("'none'");
+		$primitive5 = new Primitive();
+		$primitive5->setName('time');
+		$primitive5->setRules('[0-9]+s{1}');
 
-        $meanings2 = new Meanings();
-        $meanings2->setName("'base'");
+		$primitive6 = new Primitive();
+		$primitive6->setName('date');
+		$primitive6->setRules('тут подумать нужно');
 
-        //$block1
-        $str1 = new StringConf();
-        $str1->setName('auth_param');
-        $str1->setType('string');
-        $str1->setByDefault('none');
-        $str1->setRequired(true);
-        $str1->setOrders(1);
-        $str1->setActivity(true);
-        $str1->setValue('none');
+		//TYPE
 
+		$type1 = new Type();
+		$type1->setRequired(true);
+		$type1->setPattern([$primitive1]);
+		$type1->setRules(['basic', 'OR', 'advance']); //будем хранить в отдельной таблице БД?
 
-        $str2 = new StringConf();
-        $str2->setName('authenticate_cache_garbage_interval');
-        $str2->setType('time');
-        $str2->setByDefault('1 hour');
-        $str2->setRequired(true);
-        $str2->setOrders(2);
-        $str2->setActivity(true);
-        $str2->setValue('2 hour');
+		$type2 = new Type();
+		$type2->setRequired(false);
+		$type2->setPattern([$primitive2]);
+		$type2->setRules(['-l']); //будем хранить в отдельной таблице БД?
 
-
-        $str3 = new StringConf();
-        $str3->setName('authenticate_ttl');
-        $str3->setType('time');
-        $str3->setByDefault('1 hour');
-        $str3->setRequired(true);
-        $str3->setOrders(3);
-        $str3->setActivity(true);
-        $str3->setValue('2 hour');
-
-
-        $str4 = new StringConf();
-        $str4->setName('authenticate_ip_ttl');
-        $str4->setType('time');
-        $str4->setByDefault('1 second');
-        $str4->setRequired(true);
-        $str4->setOrders(4);
-        $str4->setActivity(true);
-        $str4->setValue('2 second');
-
-
-        //$block2
-        $str5 = new StringConf();
-        $str5->setName('external_acl_type');
-        $str5->setType('string');
-        $str5->setByDefault('none');
-        $str5->setRequired(false);
-        $str5->setOrders(1);
-        $str5->setActivity(true);
+		$type3 = new Type();
+		$type3->setRequired(false);
+		$type3->setPattern([$primitive3]);
+		$type3->setRules(['FILE_EXIST']);
 
 
-        $str6 = new StringConf();
-        $str6->setName('acl');
-        $str6->setType('rule');
-        $str6->setByDefault('');
-        $str6->setRequired(true);
-        $str6->setOrders(2);
-        $str6->setActivity(true);
+		//PATTERN
+		$pattern1 = new Pattern();
+		$pattern1->setName('basic');
+		$pattern1->setComposition([$type1, $type2, $type3]);
+		$pattern1->setRules([['{{type_2}}', 'IS', '-l'], 'AND', ['IF', '{{type_3}}', '{{type_2}}', 'IS', 'NOT', 'NULL']]);
+
+		$file = new FileConf();
+		$file->setName('Foo');
+		$file->setDate(new \DateTime());
+		$file->setDescription('Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.');
+		$file->setVersion('1.2.3 stable');
+
+		$group1 = new GroupConf();
+		$group1->setName('foo_auth');
+		$group1->setDescription('Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.');
+		$group1->setDate(new \DateTime());
+		$group1->setActivity(true);
+		$group1->setOrders(1);
+		$group1->setRequired(false);
+
+		$paramConf1 = new ParamConf();
+		$paramConf1->setName('conf_auth_type');
+		$paramConf1->addPattern($pattern1);
+		$paramConf1->setIsRepeated(false);
+
+		$param1 = new Param();
+		$param1->setName('conf_auth_type');
+		$param1->setRequired(true);
+		$param1->setOrders(1);
+		$param1->setActivity(true);
+		$param1->setDate(new \DateTime());
+		$param1->setDescription("Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.");
+		$param1->addParamConf($paramConf1);
+		$param1->setUsePattern($pattern1);
+		$param1->addParamConf($paramConf1);
 
 
-        $str7 = new StringConf();
-        $str7->setName('follow_x_forwarded_for');
-        $str7->setType('rule');
-        $str7->setByDefault('');
-        $str7->setRequired(true);
-        $str7->setOrders(3);
-        $str7->setActivity(true);
+//		$doc = $this->getDoctrine()->getManager();
+//
+//
+//		try {
+//			$doc->persist($file);
+//			$doc->flush();
+//
+//			return new Response('<div class="bg-success"><h2 class="text-center">Success</h2></div>', 200);
+//		} catch (Exception $e) {
+//			return new Response('<div class="bg-danger"><h2 class="text-center">' . $e->getMessage() . '</h2></div>', 200);
+//		}
 
-
-        $str8 = new StringConf();
-        $str8->setName('acl_uses_indirect_client');
-        $str8->setType('radio');
-        $str8->setByDefault('on');
-        $str8->setRequired(false);
-        $str8->setOrders(4);
-        $str8->setActivity(true);
-
-
-        //file
-        $file->addBlockConfig($block1);
-        $file->addBlockConfig($block2);
-        $file->addBlockConfig($block3);
-
-
-        $block1->addStringConfig($str1);
-        $block1->addStringConfig($str2);
-        $block1->addStringConfig($str3);
-        $block1->addStringConfig($str4);
-
-        $block2->addStringConfig($str5);
-        $block2->addStringConfig($str6);
-        $block2->addStringConfig($str7);
-        $block2->addStringConfig($str8);
-
-        $str1->addMeaning($meanings1);
-        $str1->addMeaning($meanings2);
-
-        $doc = $this->getDoctrine()->getManager();
-
-
-        try {
-            $doc->persist($file);
-            $doc->flush();
-
-            return new Response('<div class="bg-success"><h2 class="text-center">Success</h2></div>', 200);
-        } catch (Exception $e) {
-            return new Response('<div class="bg-danger"><h2 class="text-center">' . $e->getMessage() . '</h2></div>', 200);
-        }
-
-    }
+	}
 
 }

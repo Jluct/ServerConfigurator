@@ -115,7 +115,7 @@ class FileConf
 
         return $this;
     }
-
+    
     /**
      * Get version
      *

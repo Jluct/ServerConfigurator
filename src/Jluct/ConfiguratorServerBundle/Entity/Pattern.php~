@@ -36,12 +36,12 @@ class Pattern
 	private $rules;
 
 	/**
-	 * @var ParamConf $paramConf
+	 * @var Param $param
 	 *
 	 * @ORM\ManyToOne(targetEntity="Jluct\ConfiguratorServerBundle\Entity\ParamConf", inversedBy="patterns")
 	 * @ORM\JoinColumn(name="paramConf_id", referencedColumnName="id")
 	 */
-	private $paramConf;
+	private $param;
 
 	/**
 	 * @var array Type
@@ -51,85 +51,5 @@ class Pattern
 	 */
 	private $composition;
 
-	/**
-	 * Get id
-	 *
-	 * @return int
-	 */
-	public function getId()
-	{
-		return $this->id;
-	}
 
-	/**
-	 * Set name
-	 *
-	 * @param string $name
-	 *
-	 * @return Pattern
-	 */
-	public function setName($name)
-	{
-		$this->name = $name;
-
-		return $this;
-	}
-
-	/**
-	 * Get name
-	 *
-	 * @return string
-	 */
-	public function getName()
-	{
-		return $this->name;
-	}
-
-	/**
-	 * Set rules
-	 *
-	 * @param array $rules
-	 *
-	 * @return Pattern
-	 */
-	public function setRules($rules)
-	{
-		$this->rules = $rules;
-
-		return $this;
-	}
-
-	/**
-	 * Get rules
-	 *
-	 * @return array
-	 */
-	public function getRules()
-	{
-		return $this->rules;
-	}
-
-	/**
-	 * Set paramConf
-	 *
-	 * @param \Jluct\ConfiguratorServerBundle\Entity\ParamConf $paramConf
-	 *
-	 * @return Pattern
-	 */
-	public function setParamConf(\Jluct\ConfiguratorServerBundle\Entity\ParamConf $paramConf = null)
-	{
-		$this->paramConf = $paramConf;
-
-		return $this;
-	}
-
-	/**
-	 * Get paramConf
-	 *
-	 * @return \Jluct\ConfiguratorServerBundle\Entity\ParamConf
-	 */
-	public function getParamConf()
-	{
-		return $this->paramConf;
-	}
 }

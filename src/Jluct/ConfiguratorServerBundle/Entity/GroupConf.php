@@ -93,4 +93,293 @@ class GroupConf
      */
     private $fileConf;
     
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->dependencies = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dependent = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->param = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return GroupConf
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set required
+     *
+     * @param boolean $required
+     *
+     * @return GroupConf
+     */
+    public function setRequired($required)
+    {
+        $this->required = $required;
+
+        return $this;
+    }
+
+    /**
+     * Get required
+     *
+     * @return boolean
+     */
+    public function getRequired()
+    {
+        return $this->required;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     *
+     * @return GroupConf
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return GroupConf
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set orders
+     *
+     * @param integer $orders
+     *
+     * @return GroupConf
+     */
+    public function setOrders($orders)
+    {
+        $this->orders = $orders;
+
+        return $this;
+    }
+
+    /**
+     * Get orders
+     *
+     * @return integer
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
+    /**
+     * Set activity
+     *
+     * @param boolean $activity
+     *
+     * @return GroupConf
+     */
+    public function setActivity($activity)
+    {
+        $this->activity = $activity;
+
+        return $this;
+    }
+
+    /**
+     * Get activity
+     *
+     * @return boolean
+     */
+    public function getActivity()
+    {
+        return $this->activity;
+    }
+
+    /**
+     * Add dependency
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\GroupConf $dependency
+     *
+     * @return GroupConf
+     */
+    public function addDependency(\Jluct\ConfiguratorServerBundle\Entity\GroupConf $dependency)
+    {
+        $this->dependencies[] = $dependency;
+
+        return $this;
+    }
+
+    /**
+     * Remove dependency
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\GroupConf $dependency
+     */
+    public function removeDependency(\Jluct\ConfiguratorServerBundle\Entity\GroupConf $dependency)
+    {
+        $this->dependencies->removeElement($dependency);
+    }
+
+    /**
+     * Get dependencies
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDependencies()
+    {
+        return $this->dependencies;
+    }
+
+    /**
+     * Add dependent
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\GroupConf $dependent
+     *
+     * @return GroupConf
+     */
+    public function addDependent(\Jluct\ConfiguratorServerBundle\Entity\GroupConf $dependent)
+    {
+        $this->dependent[] = $dependent;
+
+        return $this;
+    }
+
+    /**
+     * Remove dependent
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\GroupConf $dependent
+     */
+    public function removeDependent(\Jluct\ConfiguratorServerBundle\Entity\GroupConf $dependent)
+    {
+        $this->dependent->removeElement($dependent);
+    }
+
+    /**
+     * Get dependent
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDependent()
+    {
+        return $this->dependent;
+    }
+
+    /**
+     * Add param
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\ParamConf $param
+     *
+     * @return GroupConf
+     */
+    public function addParam(\Jluct\ConfiguratorServerBundle\Entity\ParamConf $param)
+    {
+        $this->param[] = $param;
+
+        return $this;
+    }
+
+    /**
+     * Remove param
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\ParamConf $param
+     */
+    public function removeParam(\Jluct\ConfiguratorServerBundle\Entity\ParamConf $param)
+    {
+        $this->param->removeElement($param);
+    }
+
+    /**
+     * Get param
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getParam()
+    {
+        return $this->param;
+    }
+
+    /**
+     * Set fileConf
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\FileConf $fileConf
+     *
+     * @return GroupConf
+     */
+    public function setFileConf(\Jluct\ConfiguratorServerBundle\Entity\FileConf $fileConf = null)
+    {
+        $this->fileConf = $fileConf;
+
+        return $this;
+    }
+
+    /**
+     * Get fileConf
+     *
+     * @return \Jluct\ConfiguratorServerBundle\Entity\FileConf
+     */
+    public function getFileConf()
+    {
+        return $this->fileConf;
+    }
 }
