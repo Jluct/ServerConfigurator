@@ -43,85 +43,8 @@ class Type
 	private $pattern;
 
 	/**
-	 * Get id
-	 *
-	 * @return int
+	 * @var string
+	 * @ORM\Column(name="value", type="string")
 	 */
-	public function getId()
-	{
-		return $this->id;
-	}
-
-	/**
-	 * Set required
-	 *
-	 * @param boolean $required
-	 *
-	 * @return Type
-	 */
-	public function setRequired($required)
-	{
-		$this->required = $required;
-
-		return $this;
-	}
-
-	/**
-	 * Get required
-	 *
-	 * @return bool
-	 */
-	public function getRequired()
-	{
-		return $this->required;
-	}
-
-	/**
-	 * Set rules
-	 *
-	 * @param array $rules
-	 *
-	 * @return Type
-	 */
-	public function setRules($rules)
-	{
-		$this->rules = $rules;
-
-		return $this;
-	}
-
-	/**
-	 * Get rules
-	 *
-	 * @return array
-	 */
-	public function getRules()
-	{
-		return $this->rules;
-	}
-
-
-    /**
-     * Set pattern
-     *
-     * @param array $pattern
-     *
-     * @return Type
-     */
-    public function setPattern($pattern)
-    {
-        $this->pattern = $pattern;
-
-        return $this;
-    }
-
-    /**
-     * Get pattern
-     *
-     * @return array
-     */
-    public function getPattern()
-    {
-        return $this->pattern;
-    }
+	private $value;
 }

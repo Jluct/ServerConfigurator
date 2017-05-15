@@ -6,7 +6,7 @@
  * Date: 10.05.2017
  * Time: 10:27
  */
-
+namespace jluct\structure;
 // conf_foo basic -l
 // conf_foo advanced 172.0.0.1 -a -l /etc/lib/foo
 
@@ -91,7 +91,7 @@ $type4->composition = [$primitive4];
 $pattern1 = new Pattern();
 $pattern1->name = 'basic';
 $pattern1->composition = [$type1, $type2];
-$pattern1->rules = [$type1, 'IS', '-l']; //$type === '-l'
+$pattern1->rules = [$type1, 'IS', '-l']; //$type_id_1.value === '-l'
 
 $pattern2 = new Pattern();
 $pattern2->name = 'advanced';
@@ -107,7 +107,7 @@ $conf->paramConf = $conf_foo;
 $conf->usePattern = $pattern1;
 
 echo "<pre>";
-print_r($conf);
+var_dump($conf);
 echo "</pre>";
 
 echo "<pre>";
