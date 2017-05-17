@@ -40,7 +40,7 @@ class Type
 	 *
 	 * @ORM\Column(name="pattern", type="array")
 	 */
-	private $pattern;
+	private $composition;
 
 	/**
 	 * @var string
@@ -109,13 +109,13 @@ class Type
     /**
      * Set pattern
      *
-     * @param array $pattern
+     * @param array $composition
      *
      * @return Type
      */
-    public function setPattern($pattern)
+    public function setComposition($composition)
     {
-        $this->pattern = $pattern;
+        $this->composition = $composition;
 
         return $this;
     }
@@ -125,9 +125,9 @@ class Type
      *
      * @return array
      */
-    public function getPattern()
+    public function getComposition()
     {
-        return $this->pattern;
+        return $this->composition;
     }
 
     /**

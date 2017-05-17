@@ -88,8 +88,8 @@ class DefaultController extends Controller
 		 * conf_auth_session type [{file_path}] [ db_type [host [{port}] login password db_name] [/path/to/db] ]
 		 *
 		 * conf_auth_session type [{file_path}]                            [db_type     host       login    password   [db_name]]
-		 * --------------------------------------------------------------------------------------------------------------------
-		 * conf_auth_session file /path/to/file || conf_auth_session db      mysql    127.0.0.1     root    Hn8dfmF8   foo_db || conf_auth_session ram
+		 * ------------------------------------------------------------------------------------------------------------------------
+		 * conf_auth_session file /path/to/file || conf_auth_session db      mysql    127.0.0.1     root    Hn8dfmF8     foo_db    || conf_auth_session ram
 		 *
 		 * Блок foo_proxy
 		 * conf_baz 172.16.82.7 3200s
@@ -126,17 +126,17 @@ class DefaultController extends Controller
 
 		$type1 = new Type();
 		$type1->setRequired(true);
-		$type1->setPattern([$primitive1]);
+		$type1->setComposition([$primitive1]);
 		$type1->setRules(['basic', 'OR', 'advance']); //будем хранить в отдельной таблице БД?
 
 		$type2 = new Type();
 		$type2->setRequired(false);
-		$type2->setPattern([$primitive2]);
+		$type2->setComposition([$primitive2]);
 		$type2->setRules(['-l']); //будем хранить в отдельной таблице БД?
 
 		$type3 = new Type();
 		$type3->setRequired(false);
-		$type3->setPattern([$primitive3]);
+		$type3->setComposition([$primitive3]);
 		$type3->setRules(['FILE_EXIST']);
 
 
