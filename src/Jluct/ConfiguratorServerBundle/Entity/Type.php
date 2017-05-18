@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="type")
  * @ORM\Entity(repositoryClass="Jluct\ConfiguratorServerBundle\Repository\TypeRepository")
  */
-class Type
+class Type implements CompositionInterface
 {
 	/**
 	 * @var int
@@ -21,6 +21,11 @@ class Type
 	 */
 	private $id;
 
+	/**
+	 * @var string
+	 * @ORM\Column(name="name", type="string")
+	 */
+	private $name;
 	/**
 	 * @var bool
 	 *
@@ -48,109 +53,126 @@ class Type
 	 */
 	private $value;
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+	/**
+	 * Get id
+	 *
+	 * @return integer
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
 
-    /**
-     * Set required
-     *
-     * @param boolean $required
-     *
-     * @return Type
-     */
-    public function setRequired($required)
-    {
-        $this->required = $required;
+	/**
+	 * @return mixed
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
 
-        return $this;
-    }
+	/**
+	 * @param mixed $name
+	 */
+	public function setName($name)
+	{
+		$this->name = $name;
+	}
 
-    /**
-     * Get required
-     *
-     * @return boolean
-     */
-    public function getRequired()
-    {
-        return $this->required;
-    }
 
-    /**
-     * Set rules
-     *
-     * @param array $rules
-     *
-     * @return Type
-     */
-    public function setRules($rules)
-    {
-        $this->rules = $rules;
+	/**
+	 * Set required
+	 *
+	 * @param boolean $required
+	 *
+	 * @return Type
+	 */
+	public function setRequired($required)
+	{
+		$this->required = $required;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get rules
-     *
-     * @return array
-     */
-    public function getRules()
-    {
-        return $this->rules;
-    }
+	/**
+	 * Get required
+	 *
+	 * @return boolean
+	 */
+	public function getRequired()
+	{
+		return $this->required;
+	}
 
-    /**
-     * Set pattern
-     *
-     * @param array $composition
-     *
-     * @return Type
-     */
-    public function setComposition($composition)
-    {
-        $this->composition = $composition;
+	/**
+	 * Set rules
+	 *
+	 * @param array $rules
+	 *
+	 * @return Type
+	 */
+	public function setRules($rules)
+	{
+		$this->rules = $rules;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get pattern
-     *
-     * @return array
-     */
-    public function getComposition()
-    {
-        return $this->composition;
-    }
+	/**
+	 * Get rules
+	 *
+	 * @return array
+	 */
+	public function getRules()
+	{
+		return $this->rules;
+	}
 
-    /**
-     * Set value
-     *
-     * @param string $value
-     *
-     * @return Type
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
+	/**
+	 * Set pattern
+	 *
+	 * @param array $composition
+	 *
+	 * @return Type
+	 */
+	public function setComposition($composition)
+	{
+		$this->composition = $composition;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get value
-     *
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
+	/**
+	 * Get pattern
+	 *
+	 * @return array
+	 */
+	public function getComposition()
+	{
+		return $this->composition;
+	}
+
+	/**
+	 * Set value
+	 *
+	 * @param string $value
+	 *
+	 * @return Type
+	 */
+	public function setValue($value)
+	{
+		$this->value = $value;
+
+		return $this;
+	}
+
+	/**
+	 * Get value
+	 *
+	 * @return string
+	 */
+	public function getValue()
+	{
+		return $this->value;
+	}
 }

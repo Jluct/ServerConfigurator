@@ -122,19 +122,26 @@ class DefaultController extends Controller
 		$primitive6->setName('date');
 		$primitive6->setRules('тут подумать нужно');
 
+		$primitive7 = new Primitive();
+		$primitive7->setName('port');
+		$primitive7->setRules('\d{1,5}');
+
 		//TYPE
 
 		$type1 = new Type();
+		$type1->setName('type auth');
 		$type1->setRequired(true);
 		$type1->setComposition([$primitive1]);
 		$type1->setRules(['basic', 'OR', 'advance']); //будем хранить в отдельной таблице БД?
 
 		$type2 = new Type();
+		$type2->setName('logging');
 		$type2->setRequired(false);
 		$type2->setComposition([$primitive2]);
 		$type2->setRules(['-l']); //будем хранить в отдельной таблице БД?
 
 		$type3 = new Type();
+		$type2->setName('path to log file');
 		$type3->setRequired(false);
 		$type3->setComposition([$primitive3]);
 		$type3->setRules(['FILE_EXIST']);
@@ -176,6 +183,80 @@ class DefaultController extends Controller
 		$param1->setUsePattern($pattern1);
 		$param1->addParamConf($paramConf1);
 
+		/**
+		 * type - тип хранения сессии (file, db, RAM)
+		 * {file_path} - Путь к файлу с сессией. Не обязательный параметр.
+		 * Зависим от типа хранения сессии
+		 * db_type - название БД (mysql, mssql, sqlite)
+		 * (1,2)
+		 *      host - адрес расположения БД
+		 *      {port} - номер порта. Необязательный параметр для mysql, но обязательный для mssql (ну просто для примера)
+		 *      login - логин
+		 *      password - пароль
+		 *      db_name - имя БД
+		 * (3)
+		 *      /path/to/db - путь к базе данных.
+		 *
+		 * Дополнительные параметры
+		 *
+		 * 127.0.0.1 - адрес. Не обязательный параметр
+		 *
+		 * conf_auth_session type [{file_path}] [ db_type [host [{port}] login password db_name] [/path/to/db] ]
+		 *
+		 * conf_auth_session type [{file_path}]                            [db_type     host       login    password   [db_name]]
+		 * ------------------------------------------------------------------------------------------------------------------------
+		 * conf_auth_session file /path/to/file || conf_auth_session db      mysql    127.0.0.1     root    Hn8dfmF8     foo_db    || conf_auth_session ram
+		 */
+
+		$conf_auth_session_type_name = new Type();
+		$conf_auth_session_type_name->setName("type use session");
+		$conf_auth_session_type_name->setRules("TYPO_RULES)");
+		$conf_auth_session_type_name->setRequired(true);
+		$conf_auth_session_type_name->setComposition([$primitive1]);
+
+		$conf_auth_session_type_file_path = new Type();
+		$conf_auth_session_type_file_path->setName('PATH');
+		$conf_auth_session_type_file_path->setRules('TYPO_RULES)');
+		$conf_auth_session_type_file_path->setRequired(false);
+		$conf_auth_session_type_file_path->setComposition([$primitive3]);
+
+		$conf_auth_session_type_db_type = new Type();
+		$conf_auth_session_type_db_type->setName('db type');
+		$conf_auth_session_type_db_type->setRules('TYPO_RULES)');
+		$conf_auth_session_type_db_type->setRequired(true);
+		$conf_auth_session_type_db_type->setComposition([$primitive1]);
+
+		$conf_auth_session_type_db_login = new Type();
+		$conf_auth_session_type_db_login->setName('db login');
+		$conf_auth_session_type_db_login->setRules('TYPO_RULES)');
+		$conf_auth_session_type_db_login->setRequired(true);
+		$conf_auth_session_type_db_login->setComposition([$primitive1]);
+
+		$conf_auth_session_type_db_password = new Type();
+		$conf_auth_session_type_db_password->setName('db password');
+		$conf_auth_session_type_db_password->setRules('TYPO_RULES)');
+		$conf_auth_session_type_db_password->setRequired(true);
+		$conf_auth_session_type_db_password->setComposition([$primitive1]);
+
+		$conf_auth_session_type_db_name = new Type();
+		$conf_auth_session_type_db_name->setName('db name');
+		$conf_auth_session_type_db_name->setRules('TYPO_RULES)');
+		$conf_auth_session_type_db_name->setRequired(true);
+		$conf_auth_session_type_db_name->setComposition([$primitive1]);
+
+		$conf_auth_session_type_db_port = new Type();
+		$conf_auth_session_type_db_port->setName('db port');
+		$conf_auth_session_type_db_port->setRules('TYPO_RULES)');
+		$conf_auth_session_type_db_port->setRequired(true);
+		$conf_auth_session_type_db_port->setComposition([$primitive7]);
+
+
+		//PATTERN
+		$conf_auth_session_pattern = new Pattern();
+		$conf_auth_session_pattern->setName("Паттерн хранения сессии");
+		$conf_auth_session_pattern->setComposition([$conf_auth_session_type_name,]);
+
+		
 
 //		$doc = $this->getDoctrine()->getManager();
 //
