@@ -151,7 +151,7 @@ class DefaultController extends Controller
 		$pattern1 = new Pattern();
 		$pattern1->setName('basic');
 		$pattern1->setComposition([$type1, $type2, $type3]);
-		$pattern1->setRules([['{{type_2}}', 'IS', '-l'], 'AND', ['IF', '{{type_3}}', '{{type_2}}', 'IS', 'NOT', 'NULL']]);
+		$pattern1->setRules([['{{type_2}}', 'IS', '-l'], 'AND', ['IF', '{{type_3}}', '{{type_2}}', 'NOT', 'NULL']]);
 
 		$file = new FileConf();
 		$file->setName('Foo');
@@ -250,13 +250,27 @@ class DefaultController extends Controller
 		$conf_auth_session_type_db_port->setRequired(true);
 		$conf_auth_session_type_db_port->setComposition([$primitive7]);
 
-
 		//PATTERN
+		$conf_auth_session_pattern_file = new Pattern();
+		$conf_auth_session_pattern_file->setName('session file pattern');
+		$conf_auth_session_pattern_file->setComposition([$conf_auth_session_type_file_path]);
+		$conf_auth_session_pattern_file->setRules(['{{$conf_auth_session_type_file_path.value}}', 'FILE', 'EXISTS']);
+
+		$conf_auth_session_pattern_db = new Pattern();
+		$conf_auth_session_pattern_db->setName('session db pattern');
+		$conf_auth_session_pattern_db->setComposition([
+			$conf_auth_session_type_db_type,
+			$conf_auth_session_type_db_login,
+			$conf_auth_session_type_db_password,
+			$conf_auth_session_type_db_name,
+			$conf_auth_session_type_db_port
+		]);
+		$conf_auth_session_pattern_db->setRules(['IF', '{{$conf_auth_session_type_db_type.value}}', 'IS', 'mssql', '{{$conf_auth_session_type_db_port.value}}', 'NOT', 'NULL']);
+
 		$conf_auth_session_pattern = new Pattern();
 		$conf_auth_session_pattern->setName("Паттерн хранения сессии");
-		$conf_auth_session_pattern->setComposition([$conf_auth_session_type_name,]);
+		$conf_auth_session_pattern->setComposition([$conf_auth_session_type_name, [$conf_auth_session_pattern_file]]);
 
-		
 
 //		$doc = $this->getDoctrine()->getManager();
 //
