@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="type")
  * @ORM\Entity(repositoryClass="Jluct\ConfiguratorServerBundle\Repository\TypeRepository")
  */
-class Type implements CompositionInterface
+class Type
 {
 	/**
 	 * @var int

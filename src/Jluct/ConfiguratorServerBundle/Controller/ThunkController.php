@@ -2,46 +2,77 @@
 
 class Primitive
 {
-	public function __construct($name, $rules)
-	{
-		$this->name = $name;
-		$this->rules = $rules;
-	}
+    public function __construct($name, $rules)
+    {
+        $this->name = $name;
+        $this->rules = $rules;
+    }
 }
 
-class StringPrimitive extends Primitive
-{
-	public function __construct()
-	{
-		parent::__construct('string', 'a-zA-Z');
-	}
-}
 
 class Type
 {
-	public function __construct($name, $primitive, $rules)
-	{
-		$this->name = $name;
-		$this->primitive = $primitive;
-		$this->rules = $rules;
-	}
+    public function __construct($name, $primitive, $rules)
+    {
+        $this->name = $name;
+        $this->primitive = $primitive;
+        $this->rules = $rules;
+    }
 }
 
 $str = new StringPrimitive();
 
 $authType = new Type('AuthType', $str, [
-	'$or' => ['basic', 'advance'],
+    '$or' => ['basic', 'advance'],
 ]);
 
 // Возможная система описания Rules:
 $rules = [
-	'$and' => [
-		'auth',
-		'$or' => [
-			'basic',
-			'advanced',
-		],
-	],
+    '$and' => [
+        'auth',
+        '$or' => [
+            'basic',
+            'advanced',
+        ],
+    ],
 ];
-// Можно читать как:
-// auth $and (basic $or advanced)
+
+/**
+ * IF...THEN
+ * AND, OR, NOT, IS
+ *
+ * IF {{$TYPE1->VALUE}} IS 'PARAM' AND {{$TYPE2->VALUE}} IS '-L'
+ *      THEN {{$TYPE2->VALUE}} NOT IS NULL
+ * []
+ *
+ */
+['IF' => [
+    'CONDITION' => [
+        [
+            'AND' => [
+                ['IS' => ['{{$TYPE1->VALUE}}', 'PARAM'], ['{{$TYPE2->VALUE}}', '-L']],
+
+            ],
+            'NOT' => [
+
+            ]
+        ],
+    ],
+    'THEN' => [
+        ['NOT' => ['{{$TYPE2->VALUE}}', 'NULL']]
+    ],
+]];
+
+['IF' => [
+    'CONDITION' => [
+        ['AND', [
+            ['IS', '{{$TYPE1->VALUE}}', 'PARAM'],
+            ['IS', '{{$TYPE2->VALUE}}', '-L']
+        ],
+
+        ],
+    ],
+    'THEN' => [
+        ['NOT' => ['{{$TYPE2->VALUE}}', 'NULL']]
+    ],
+]];

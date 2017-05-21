@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="pattern")
  * @ORM\Entity(repositoryClass="Jluct\ConfiguratorServerBundle\Repository\PatternRepository")
  */
-class Pattern implements CompositionInterface
+class Pattern
 {
 	/**
 	 * @var int

@@ -201,7 +201,10 @@ class DefaultController extends Controller
 		 *
 		 * 127.0.0.1 - адрес. Не обязательный параметр
 		 *
-		 * conf_auth_session type [{file_path}] [ db_type [host [{port}] login password db_name] [/path/to/db] ]
+		 * conf_auth_session type
+		 * [{file_path}]
+		 * [ db_type [host [{port}] login password db_name]
+		 * [/path/to/db] ]
 		 *
 		 * conf_auth_session type [{file_path}]                            [db_type     host       login    password   [db_name]]
 		 * ------------------------------------------------------------------------------------------------------------------------
