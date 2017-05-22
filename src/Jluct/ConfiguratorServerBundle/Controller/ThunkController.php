@@ -2,40 +2,42 @@
 
 class Primitive
 {
-    public function __construct($name, $rules)
-    {
-        $this->name = $name;
-        $this->rules = $rules;
-    }
+	public function __construct($name, $rules)
+	{
+		$this->name = $name;
+		$this->rules = $rules;
+	}
 }
 
 
 class Type
 {
-    public function __construct($name, $primitive, $rules)
-    {
-        $this->name = $name;
-        $this->primitive = $primitive;
-        $this->rules = $rules;
-    }
+	public function __construct($name, $primitive, $rules)
+	{
+		$this->name = $name;
+		$this->primitive = $primitive;
+		$this->rules = $rules;
+	}
 }
 
 $str = new StringPrimitive();
 
 $authType = new Type('AuthType', $str, [
-    '$or' => ['basic', 'advance'],
+	'$or' => ['basic', 'advance'],
 ]);
 
 // Возможная система описания Rules:
 $rules = [
-    '$and' => [
-        'auth',
-        '$or' => [
-            'basic',
-            'advanced',
-        ],
-    ],
+	'$and' => [
+		'auth',
+		'$or' => [
+			'basic',
+			'advanced',
+		],
+	],
 ];
+
+$pattern = new Pattern();
 
 /**
  * IF...THEN
@@ -43,36 +45,36 @@ $rules = [
  *
  * IF {{$TYPE1->VALUE}} IS 'PARAM' AND {{$TYPE2->VALUE}} IS '-L'
  *      THEN {{$TYPE2->VALUE}} NOT IS NULL
- * []
  *
  */
-['IF' => [
-    'CONDITION' => [
-        [
-            'AND' => [
-                ['IS' => ['{{$TYPE1->VALUE}}', 'PARAM'], ['{{$TYPE2->VALUE}}', '-L']],
 
-            ],
-            'NOT' => [
-
-            ]
-        ],
-    ],
-    'THEN' => [
-        ['NOT' => ['{{$TYPE2->VALUE}}', 'NULL']]
-    ],
-]];
 
 ['IF' => [
-    'CONDITION' => [
-        ['AND', [
-            ['IS', '{{$TYPE1->VALUE}}', 'PARAM'],
-            ['IS', '{{$TYPE2->VALUE}}', '-L']
-        ],
+	'CONDITION' => ['AND', [
+		['IS', '{{0.VALUE}}', 'PARAM'],
+		['IS', '{{1.VALUE}}', '-L']
+	],
+	],
+	'THEN' => [
+		['NOT', '{{2.VALUE}}', 'NULL']
+	]
+], 'ELSE IF' => [
 
-        ],
-    ],
-    'THEN' => [
-        ['NOT' => ['{{$TYPE2->VALUE}}', 'NULL']]
-    ],
-]];
+]
+];
+
+
+$pattern->setRules(
+	['IF' => [
+		'CONDITION' => [
+			['OR',
+				['NOT', '{{2.VALUE}}', 'NULL'],
+				['NOT', '{{1.VALUE}}', 'NULL']
+			]
+		]
+	], 'THEN' => [
+		['IS', '2.VALUE', '-l'],
+		['NOT', '{{2.VALUE}}', 'NULL']
+	]
+	]
+);

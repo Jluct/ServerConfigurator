@@ -2,6 +2,7 @@
 
 namespace Jluct\ConfiguratorServerBundle\Entity;
 
+use Jluct\ConfiguratorServerBundle\Entity\Primitive;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,6 +27,7 @@ class Type
 	 * @ORM\Column(name="name", type="string")
 	 */
 	private $name;
+
 	/**
 	 * @var bool
 	 *
@@ -43,9 +45,10 @@ class Type
 	/**
 	 * @var Pattern $patterns
 	 *
-	 * @ORM\Column(name="pattern", type="array")
+	 * @ORM\ManyToOne(targetEntity="Primitive")
+	 * @ORM\JoinColumn(name="primitive_id", referencedColumnName="id")
 	 */
-	private $composition;
+	private $primitive;
 
 	/**
 	 * @var string
@@ -131,13 +134,13 @@ class Type
 	/**
 	 * Set pattern
 	 *
-	 * @param array $composition
+	 * @param Primitive $primitive
 	 *
 	 * @return Type
 	 */
-	public function setComposition($composition)
+	public function setPrimitive(Primitive $primitive)
 	{
-		$this->composition = $composition;
+		$this->primitive = $primitive;
 
 		return $this;
 	}
@@ -147,9 +150,9 @@ class Type
 	 *
 	 * @return array
 	 */
-	public function getComposition()
+	public function getPrimitive()
 	{
-		return $this->composition;
+		return $this->primitive;
 	}
 
 	/**
@@ -174,5 +177,14 @@ class Type
 	public function getValue()
 	{
 		return $this->value;
+	}
+
+	/**
+	 * Type constructor.
+	 * @param \Jluct\ConfiguratorServerBundle\Entity\Primitive $primitive
+	 */
+	public function __construct(Primitive $primitive)
+	{
+		$this->setPrimitive($primitive);
 	}
 }
