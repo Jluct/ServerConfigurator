@@ -2,6 +2,7 @@
 
 namespace Jluct\ConfiguratorServerBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Jluct\ConfiguratorServerBundle\Entity\Primitive;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -50,10 +51,6 @@ class Type
 	 */
 	private $primitive;
 
-	/**
-	 * @var string
-	 * @ORM\Column(name="value", type="string")
-	 */
 	private $value;
 
 	/**
@@ -122,6 +119,29 @@ class Type
 	}
 
 	/**
+	 * @return mixed
+	 */
+	public function getValue($id)
+	{
+		return $this->value[$id];
+	}
+
+
+	public function addValue($id, $value)
+	{
+		$this->value[$id] = $value;
+
+		return $this;
+	}
+
+	public function removeValue($id)
+	{
+		unset($this->value[$id]);
+
+		return $this;
+	}
+
+	/**
 	 * Get rules
 	 *
 	 * @return array
@@ -156,35 +176,12 @@ class Type
 	}
 
 	/**
-	 * Set value
-	 *
-	 * @param string $value
-	 *
-	 * @return Type
-	 */
-	public function setValue($value)
-	{
-		$this->value = $value;
-
-		return $this;
-	}
-
-	/**
-	 * Get value
-	 *
-	 * @return string
-	 */
-	public function getValue()
-	{
-		return $this->value;
-	}
-
-	/**
 	 * Type constructor.
 	 * @param \Jluct\ConfiguratorServerBundle\Entity\Primitive $primitive
 	 */
 	public function __construct(Primitive $primitive)
 	{
 		$this->setPrimitive($primitive);
+		$this->primitive = new ArrayCollection();
 	}
 }

@@ -45,7 +45,7 @@ class ParamConf
 	 * @ORM\OneToMany(targetEntity="Jluct\ConfiguratorServerBundle\Entity\Pattern", mappedBy="param")
 	 */
 	private $patterns;
-	
+
     /**
      * Constructor
      */

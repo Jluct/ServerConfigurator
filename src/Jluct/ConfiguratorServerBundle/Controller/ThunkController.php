@@ -38,6 +38,10 @@ $rules = [
 ];
 
 $pattern = new Pattern();
+$pattern1->setComposition([$type1, $type2, $type3]);
+$type1->addValue($param->id, $value);
+//value =[1=> value ]
+
 
 /**
  * IF...THEN

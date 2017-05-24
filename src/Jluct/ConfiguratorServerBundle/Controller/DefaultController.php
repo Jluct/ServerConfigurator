@@ -14,6 +14,7 @@ use Jluct\ConfiguratorServerBundle\Entity\StringConf;
 use Jluct\ConfiguratorServerBundle\Entity\Type;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\VarDumper\VarDumper;
 
@@ -133,35 +134,15 @@ class DefaultController extends Controller
 			]
 			]);
 
-		$file = new FileConf();
-		$file->setName('Foo');
-		$file->setDate(new \DateTime());
-		$file->setDescription('Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.');
-		$file->setVersion('1.2.3 stable');
-
-		$group1 = new GroupConf();
-		$group1->setName('foo_auth');
-		$group1->setDescription('Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.');
-		$group1->setDate(new \DateTime());
-		$group1->setActivity(true);
-		$group1->setOrders(1);
-		$group1->setRequired(false);
-
 		$paramConf1 = new ParamConf();
 		$paramConf1->setName('conf_auth_type');
-		$paramConf1->addPattern($pattern1);
+		$paramConf1->addPattern($pattern1); //паттерн
 		$paramConf1->setIsRepeated(false);
 
 		$param1 = new Param();
 		$param1->setName('conf_auth_type');
-		$param1->setRequired(true);
-		$param1->setOrders(1);
-		$param1->setActivity(true);
-		$param1->setDate(new \DateTime());
-		$param1->setDescription("Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.");
 		$param1->addParamConf($paramConf1);
-		$param1->setUsePattern($pattern1);
-		$param1->addParamConf($paramConf1);
+		// конкретное зачение
 
 		/**
 		 * type - тип хранения сессии (file, db, RAM)
@@ -258,11 +239,32 @@ class DefaultController extends Controller
 				]
 			]]);
 
-
 		$conf_auth_session_pattern = new Pattern();
 		$conf_auth_session_pattern->setName("Паттерн хранения сессии");
 		$conf_auth_session_pattern->setComposition([$conf_auth_session_type_name, $conf_auth_session_pattern_file, $conf_auth_session_pattern_db]);
 
+		$paramConf2 = new ParamConf();
+		$paramConf2->setName('conf_session_type');
+		$paramConf2->addPattern($conf_auth_session_pattern); //паттерн
+		$paramConf2->setIsRepeated(false);
+
+		$param2 = new Param();
+		$param2->setName('conf_auth_type');
+		$param2->addParamConf($paramConf1);
+
+		$group1 = new GroupConf();
+		$group1->setName('foo_auth');
+		$group1->addParam($paramConf1);
+		$group1->addParam($paramConf2);
+
+		$file = new FileConf();
+		$file->setName('Foo');
+		$file->addGroupsConfig($group1);
+
+
+		VarDumper::dump($file); //отладчик
+//		var_dump($file);
+		return $this->render('JluctConfiguratorServerBundle:Default:index.html.twig');
 
 //		$doc = $this->getDoctrine()->getManager();
 //
