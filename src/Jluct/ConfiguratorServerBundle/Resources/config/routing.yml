@@ -3,8 +3,8 @@ jluct_configurator_server_homepage:
     defaults: { _controller: JluctConfiguratorServerBundle:Default:index }
 
 jluct_configurator_server_add_data:
-    path:     /add-test-data
-    defaults: { _controller: JluctConfiguratorServerBundle:Default:addData }
+    path:     /get-test-data
+    defaults: { _controller: JluctConfiguratorServerBundle:Default:Data }
 
 jluct_configurator_server_get_file_config:
     path:     /file/{id}

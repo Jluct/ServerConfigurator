@@ -2,21 +2,23 @@
 
 namespace Jluct\ConfiguratorServerBundle\Controller;
 
-use Jluct\ConfiguratorServerBundle\Entity\BlockConf;
 use Jluct\ConfiguratorServerBundle\Entity\FileConf;
 use Jluct\ConfiguratorServerBundle\Entity\GroupConf;
-use Jluct\ConfiguratorServerBundle\Entity\Meanings;
 use Jluct\ConfiguratorServerBundle\Entity\Param;
 use Jluct\ConfiguratorServerBundle\Entity\ParamConf;
 use Jluct\ConfiguratorServerBundle\Entity\Pattern;
 use Jluct\ConfiguratorServerBundle\Entity\Primitive;
-use Jluct\ConfiguratorServerBundle\Entity\StringConf;
 use Jluct\ConfiguratorServerBundle\Entity\Type;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\VarDumper\VarDumper;
+
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 class DefaultController extends Controller
 {
@@ -44,7 +46,7 @@ class DefaultController extends Controller
 		);
 	}
 
-	public function addDataAction()
+	public function DataAction()
 	{
 
 		/**
@@ -258,12 +260,22 @@ class DefaultController extends Controller
 		$group1->addParam($paramConf2);
 
 		$file = new FileConf();
+		$file->setId(1);
 		$file->setName('Foo');
 		$file->addGroupsConfig($group1);
 
 
-		VarDumper::dump($file); //отладчик
-//		var_dump($file);
+		//VarDumper::dump($file); //отладчик
+		
+		$encoders = array(new XmlEncoder(), new JsonEncoder());
+		$normalizers = array(new ObjectNormalizer());
+
+		$serializer = new Serializer($normalizers, $encoders);
+
+		$data = $serializer->serialize($file, 'json');
+
+		return new Response($data);
+
 		return $this->render('JluctConfiguratorServerBundle:Default:index.html.twig');
 
 //		$doc = $this->getDoctrine()->getManager();
