@@ -6,33 +6,60 @@
  * Date: 24.05.2017
  * Time: 10:05
  */
+
+namespace Jluct\ConfiguratorServerBundle\Services\ParamValidator;
+
+
+use \Jluct\ConfiguratorServerBundle\Entity\ParamConf;
+use Doctrine\Common\Collections\Collection;
+use Jluct\ConfiguratorServerBundle\Entity\Type;
+
+use Jluct\ConfiguratorServerBundle\Services\ConditionConstructor\ConditionConstructor;
+
 class ParamValidator
 {
-	private $pattern;
-	private $constructor;
+    private $param;
+    private $constructor;
 
-	public function __construct(\Jluct\ConfiguratorServerBundle\Entity\Pattern $pattern,
-	                            ConditionConstructor $constructor)
-	{
-		$this->pattern = $pattern;
-		$this->constructor = $constructor;
-	}
+    public function __construct(ParamConf $param,
+                                ConditionConstructor $constructor)
+    {
+        $this->param = $param;
+        $this->constructor = $constructor;
+    }
 
 
-	public function isValid()
-	{
-		return ($this->isValidStructure() == $this->isValidValue()) == true;
-	}
+    public function isValid()
+    {
+        return ($this->isValidStructure() == $this->isValidValue()) == true;
+    }
 
-	public function isValidStructure()
-	{
+    public function isValidStructure()
+    {
+        
+    }
 
-	}
+    public function isValidValue()
+    {
+        $this->valid($this->param->getPatterns());
+    }
 
-	public function isValidValue()
-	{
+    public function valid(Collection $array)
+    {
+        foreach ($array as &$item) {
+            if (get_class($item) == 'Pattern')
+                $this->valid($item->getPatterns());
+            else
+                $this->validType($item);
 
-	}
+
+        }
+    }
+
+    public function validType(Type $type)
+    {
+        return preg_match($type->getRules(), $type->getValue());
+    }
 
 }
 

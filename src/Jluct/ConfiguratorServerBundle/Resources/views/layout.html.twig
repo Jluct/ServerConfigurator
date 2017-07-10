@@ -91,5 +91,15 @@
     <script src="{{ asset('vendor/jquery/jquery-2.1.1.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
 {% endblock %}
+
+<script>
+
+    $('#test').click(function () {
+        $.post('/get-data', function (data) {
+            console.log(data);
+        })
+    });
+
+</script>
 </body>
 </html>
