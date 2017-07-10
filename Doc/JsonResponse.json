@@ -1,0 +1,196 @@
+{
+    "id": 1,
+    "name": "Foo",
+    "groupsConfig": [
+        {
+            "id": null,
+            "name": "foo_auth",
+            "dependencies": [],
+            "dependent": [],
+            "param": [
+                {
+                    "id": null,
+                    "name": "conf_auth_type",
+                    "isRepeated": false,
+                    "patterns": [
+                        {
+                            "id": null,
+                            "name": "basic",
+                            "rules": {
+                                "IF": {
+                                    "CONDITION": [
+                                        [
+                                            "OR",
+                                            [
+                                                "NOT",
+                                                "{{2.VALUE}}",
+                                                "NULL"
+                                            ],
+                                            [
+                                                "NOT",
+                                                "{{1.VALUE}}",
+                                                "NULL"
+                                            ]
+                                        ]
+                                    ]
+                                },
+                                "THEN": [
+                                    [
+                                        "IS",
+                                        "2.VALUE",
+                                        "-l"
+                                    ],
+                                    [
+                                        "NOT",
+                                        "{{2.VALUE}}",
+                                        "NULL"
+                                    ]
+                                ]
+                            },
+                            "composition": [
+                                {
+                                    "id": null,
+                                    "name": "type auth",
+                                    "required": true,
+                                    "rules": [
+                                        "basic",
+                                        "OR",
+                                        "advance"
+                                    ],
+                                    "primitive": []
+                                },
+                                {
+                                    "id": null,
+                                    "name": "path to log file",
+                                    "required": false,
+                                    "rules": [
+                                        "-l"
+                                    ],
+                                    "primitive": []
+                                },
+                                {
+                                    "id": null,
+                                    "name": null,
+                                    "required": false,
+                                    "rules": [
+                                        "FILE_EXIST"
+                                    ],
+                                    "primitive": []
+                                }
+                            ],
+                            "param": null
+                        }
+                    ]
+                },
+                {
+                    "id": null,
+                    "name": "conf_session_type",
+                    "isRepeated": false,
+                    "patterns": [
+                        {
+                            "id": null,
+                            "name": "\u041f\u0430\u0442\u0442\u0435\u0440\u043d \u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f \u0441\u0435\u0441\u0441\u0438\u0438",
+                            "rules": null,
+                            "composition": [
+                                {
+                                    "id": null,
+                                    "name": "type use session",
+                                    "required": true,
+                                    "rules": "TYPO_RULES)",
+                                    "primitive": []
+                                },
+                                {
+                                    "id": null,
+                                    "name": "session file pattern",
+                                    "rules": {
+                                        "IF": {
+                                            "CONDITION": [
+                                                [
+                                                    "EXISTS",
+                                                    "FILE",
+                                                    "{{0.value}}"
+                                                ]
+                                            ]
+                                        }
+                                    },
+                                    "composition": [
+                                        {
+                                            "id": null,
+                                            "name": "PATH",
+                                            "required": false,
+                                            "rules": "TYPO_RULES)",
+                                            "primitive": []
+                                        }
+                                    ],
+                                    "param": null
+                                },
+                                {
+                                    "id": null,
+                                    "name": "session db pattern",
+                                    "rules": {
+                                        "IF": {
+                                            "CONDITION": [
+                                                [
+                                                    "IS",
+                                                    "{{0.value}}",
+                                                    "mssql"
+                                                ]
+                                            ],
+                                            "THEN": [
+                                                [
+                                                    "NOT",
+                                                    "{{4.value}}",
+                                                    "NULL"
+                                                ]
+                                            ]
+                                        }
+                                    },
+                                    "composition": [
+                                        {
+                                            "id": null,
+                                            "name": "db type",
+                                            "required": true,
+                                            "rules": "TYPO_RULES)",
+                                            "primitive": []
+                                        },
+                                        {
+                                            "id": null,
+                                            "name": "db login",
+                                            "required": true,
+                                            "rules": "TYPO_RULES)",
+                                            "primitive": []
+                                        },
+                                        {
+                                            "id": null,
+                                            "name": "db password",
+                                            "required": true,
+                                            "rules": "TYPO_RULES)",
+                                            "primitive": []
+                                        },
+                                        {
+                                            "id": null,
+                                            "name": "db name",
+                                            "required": true,
+                                            "rules": "TYPO_RULES)",
+                                            "primitive": []
+                                        },
+                                        {
+                                            "id": null,
+                                            "name": "db port",
+                                            "required": true,
+                                            "rules": "TYPO_RULES)",
+                                            "primitive": []
+                                        }
+                                    ],
+                                    "param": null
+                                }
+                            ],
+                            "param": null
+                        }
+                    ]
+                }
+            ],
+            "fileConf": null
+        }
+    ]
+}

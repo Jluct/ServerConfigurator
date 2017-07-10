@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new Jluct\ConfiguratorServerBundle\JluctConfiguratorServerBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle(), //
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

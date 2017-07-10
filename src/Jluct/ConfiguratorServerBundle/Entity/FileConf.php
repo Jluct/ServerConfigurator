@@ -13,57 +13,59 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class FileConf
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="id", type="integer")
+	 * @ORM\Id
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	private $id;
 
-    /**
-     * @var string
-     * @ORM\Column(name="name", type="string", length=255)
-     */
-    private $name;
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="name", type="string", length=255)
+	 */
+	private $name;
 
-    /**
-     * @var ArrayCollection $groupsConfig
-     * @ORM\OneToMany(targetEntity="GroupConf", mappedBy="fileConf", cascade={"persist"})
-     */
-    private $groupsConfig;
 
-    /**
-     * Get id
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+	/**
+	 * @var ArrayCollection $groupsConfig
+	 * @ORM\OneToMany(targetEntity="GroupConf", mappedBy="fileConf", cascade={"persist"})
+	 */
+	private $groupsConfig;
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     * @return FileConf
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
+	/**
+	 * Get id
+	 * @return int
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
 
-        return $this;
-    }
+	/**
+	 * Set name
+	 *
+	 * @param string $name
+	 * @return FileConf
+	 */
+	public function setName($name)
+	{
+		$this->name = $name;
 
-    /**
-     * Get name
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
+		return $this;
+	}
+
+	/**
+	 * Get name
+	 * @return string
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
 
     /**
      * Constructor
@@ -73,37 +75,38 @@ class FileConf
         $this->groupsConf = new ArrayCollection();
     }
 
-    /**
-     * Add groupsConfig
-     *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupsConfig
-     *
-     * @return FileConf
-     */
-    public function addGroupsConfig(\Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupsConfig)
-    {
-        $this->groupsConfig[] = $groupsConfig;
+	/**
+	 * Add groupsConfig
+	 *
+	 * @param \Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupsConfig
+	 *
+	 * @return FileConf
+	 */
+	public function addGroupsConfig(\Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupsConfig)
+	{
+		$this->groupsConfig[] = $groupsConfig;
 
-        return $this;
-    }
 
-    /**
-     * Remove groupsConfig
-     *
-     * @param \Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupsConfig
-     */
-    public function removeGroupsConfig(\Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupsConfig)
-    {
-        $this->groupsConfig->removeElement($groupsConfig);
-    }
+		return $this;
+	}
 
-    /**
-     * Get groupsConfig
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getGroupsConfig()
-    {
-        return $this->groupsConfig;
-    }
+	/**
+	 * Remove groupsConfig
+	 *
+	 * @param \Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupsConfig
+	 */
+	public function removeGroupsConfig(\Jluct\ConfiguratorServerBundle\Entity\GroupConf $groupsConfig)
+	{
+		$this->groupsConfig->removeElement($groupsConfig);
+	}
+
+	/**
+	 * Get groupsConfig
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getGroupsConfig()
+	{
+		return $this->groupsConfig;
+	}
 }
