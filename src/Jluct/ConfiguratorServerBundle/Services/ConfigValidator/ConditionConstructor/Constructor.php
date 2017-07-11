@@ -7,12 +7,12 @@
  * Time: 10:11
  */
 
-namespace Jluct\ConfiguratorServerBundle\Services\ConditionConstructor;
+namespace Jluct\ConfiguratorServerBundle\Services\ConfigValidator;
 
 use Doctrine\Common\Collections\Collection;
 use Jluct\ConfiguratorServerBundle\Entity\Type;
 
-class ConditionConstructor
+class Constructor
 {
 
 

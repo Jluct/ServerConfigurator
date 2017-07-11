@@ -48,7 +48,9 @@ $type1->addValue($param->id, $value);
  * AND, OR, NOT, IS
  *
  * IF {{$TYPE1->VALUE}} IS 'PARAM' AND {{$TYPE2->VALUE}} IS '-L'
- *      THEN {{$TYPE2->VALUE}} NOT IS NULL
+ *      THEN  IF{{$TYPE2->VALUE}} NOT IS NULL
+ ***************************************************************
+ *      THEN  SET {{$TYPE2->VALUE}} FALSE
  *
  */
 
