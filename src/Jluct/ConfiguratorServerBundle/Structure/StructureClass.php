@@ -36,6 +36,11 @@ class StructureClass
         return $this->rules;
     }
 
+    public function setRules(array $rules)
+    {
+        $this->rules = $rules;
+    }
+
     public function addComponents(StructureClass $component)
     {
         $this->components[] = $component;
@@ -45,6 +50,5 @@ class StructureClass
     {
         $this->components = new ArrayCollection();
     }
-
 
 }

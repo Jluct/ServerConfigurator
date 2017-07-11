@@ -3,7 +3,6 @@
 namespace Jluct\ConfiguratorServerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Jluct\ConfiguratorServerBundle\Structure\StructureClass;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -170,5 +169,52 @@ class Type
     {
         $this->components = new ArrayCollection();
     }
-}
 
+    /**
+     * Add component
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\Type $component
+     *
+     * @return Type
+     */
+    public function addComponent(\Jluct\ConfiguratorServerBundle\Entity\Type $component)
+    {
+        $this->components[] = $component;
+
+        return $this;
+    }
+
+    /**
+     * Remove component
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\Type $component
+     */
+    public function removeComponent(\Jluct\ConfiguratorServerBundle\Entity\Type $component)
+    {
+        $this->components->removeElement($component);
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \Jluct\ConfiguratorServerBundle\Entity\Type $parent
+     *
+     * @return Type
+     */
+    public function setParent(\Jluct\ConfiguratorServerBundle\Entity\Type $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Jluct\ConfiguratorServerBundle\Entity\Type
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+}
